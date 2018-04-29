@@ -6,10 +6,30 @@
     <description>Recent content on Tullia Padellini</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 01 Jan 1970 01:33:38 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 02 Nov 2016 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>The almighty Bootstrap</title>
+      <link>/post_ita/2018-04-29-bootstrap/</link>
+      <pubDate>Wed, 02 Nov 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/post_ita/2018-04-29-bootstrap/</guid>
+      <description>Ingredienti di base Riprendiamo il classico setup visto ad inferenza, ossia supponiamo di avere un campione \(X_1,\dots X_n\) di variabili indipendenti ed identicamente distribuite (i.i.d.) proveniente da una distribuzione \(F\), dove \(F(x) = \mathbb{P}(X_i\leq x)\).
+Indichiamo con \(\mu_F\) e \(\sigma^2 _F\) rispettivamente la media e la varianza della generica variabile \(X_i\). La notazione con \(F\) sottoscritto serve a ricordare che sia \(\mu_F\) che \(\sigma^2_F\) sono funzioni della funzione di ripartizione, infatti:</description>
+    </item>
+    
+    <item>
+      <title>Basic Monte Carlo</title>
+      <link>/post_en/montecarlo/</link>
+      <pubDate>Wed, 12 Oct 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/post_en/montecarlo/</guid>
+      <description>The intuition: Remember the (weak) Law of Large Numbers? Just a quick recap: if \(X_1,\dots, X_n\) are i.i.d. random variables from a distribution \(F\) with mean \(\mu\) and variance \(\sigma^2\), then the sample mean \(\bar{X}_n\) converges in probability to the population mean \(\mu\).
+Using more formulas, we can write the LLN as \[ \bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i \rightarrow \mu =\int xdF(x)\] as \(n\rightarrow \infty\). One way to look at this is that, if the sample size \(n\) is “close to infinity” (or more generally, if \(n\) is “large enough”), then we have \[\frac{1}{n}\sum_{i=1}^n X_i \approx \int xdF.</description>
+    </item>
     
     <item>
       <title></title>
@@ -19,6 +39,15 @@
       <guid>/about/</guid>
       <description>img { display: block; margin-left: auto; margin-right: auto; }  out of school I live for boring documentaries, trash music, junk food &amp;amp; fancy ice-cream.
 I spent some time in Finland (in the winter) and Saudi Arabia (in the summer). My weather-related small talk skills are off the chart.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/teaching/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/teaching/</guid>
+      <description> where &amp;amp; when to find me:  office hours: tuesday 9 &amp;ndash; 11 address: stanza 41 &amp;ndash; Dipartimento di Scienze Statistiche, Piazzale Aldo Moro 5, 00185, Rome, ITALY  Material &amp;amp; Lecture notes  [EN] - Some stuff covered in class [ITA] - Cose viste a lezione  </description>
     </item>
     
     <item>
@@ -36,11 +65,11 @@ I spent some time in Finland (in the winter) and Saudi Arabia (in the summer). M
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/research/</guid>
-      <description>My two main topics of interest are Quantile Regression and Topological Data Analysis &amp;ndash; more specifically:
- Model-based Quantile Regression for Discrete Data
+      <description>My two main topics of interest are Quantile Regression and Topological Data Analysis &amp;ndash; more specifically:  Model-based Quantile Regression for Discrete Data
  Supervised Learning with Indefinite Topological Kernels
  Persistence Flamelets: multiscale Persistent Homology for kernel density exploration
-  My fear of commitment makes me study other things as well.</description>
+  
+My fear of commitment makes me study other things as well.</description>
     </item>
     
     <item>
@@ -49,16 +78,7 @@ I spent some time in Finland (in the winter) and Saudi Arabia (in the summer). M
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/talks/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Teaching</title>
-      <link>/teaching/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/teaching/</guid>
-      <description> where &amp;amp; when to find me:  office hours: tuesday 9 &amp;ndash; 11 address: stanza 41 &amp;ndash; Dipartimento di Scienze Statistiche, Piazzale Aldo Moro 5, 00185, Rome, ITALY  </description>
+      <description>hkjahkjhk</description>
     </item>
     
   </channel>

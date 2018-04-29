@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Post_ens on Tullia Padellini</title>
+    <link>/post_en/</link>
+    <description>Recent content in Post_ens on Tullia Padellini</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 12 Oct 2016 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/post_en/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Basic Monte Carlo</title>
+      <link>/post_en/montecarlo/</link>
+      <pubDate>Wed, 12 Oct 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/post_en/montecarlo/</guid>
+      <description>The intuition: Remember the (weak) Law of Large Numbers? Just a quick recap: if \(X_1,\dots, X_n\) are i.i.d. random variables from a distribution \(F\) with mean \(\mu\) and variance \(\sigma^2\), then the sample mean \(\bar{X}_n\) converges in probability to the population mean \(\mu\).
+Using more formulas, we can write the LLN as \[ \bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i \rightarrow \mu =\int xdF(x)\] as \(n\rightarrow \infty\). One way to look at this is that, if the sample size \(n\) is “close to infinity” (or more generally, if \(n\) is “large enough”), then we have \[\frac{1}{n}\sum_{i=1}^n X_i \approx \int xdF.</description>
+    </item>
+    
+  </channel>
+</rss>

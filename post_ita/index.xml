@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Post_ita on Tullia Padellini</title>
+    <link>/post_ita/</link>
+    <description>Recent content in Post_ita on Tullia Padellini</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 02 Nov 2016 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/post_ita/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>The almighty Bootstrap</title>
+      <link>/post_ita/2018-04-29-bootstrap/</link>
+      <pubDate>Wed, 02 Nov 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/post_ita/2018-04-29-bootstrap/</guid>
+      <description>Ingredienti di base Riprendiamo il classico setup visto ad inferenza, ossia supponiamo di avere un campione \(X_1,\dots X_n\) di variabili indipendenti ed identicamente distribuite (i.i.d.) proveniente da una distribuzione \(F\), dove \(F(x) = \mathbb{P}(X_i\leq x)\).
+Indichiamo con \(\mu_F\) e \(\sigma^2 _F\) rispettivamente la media e la varianza della generica variabile \(X_i\). La notazione con \(F\) sottoscritto serve a ricordare che sia \(\mu_F\) che \(\sigma^2_F\) sono funzioni della funzione di ripartizione, infatti:</description>
+    </item>
+    
+  </channel>
+</rss>
