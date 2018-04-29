@@ -95,14 +95,14 @@
   num/denom * 8 * 1/cos(x) * 1.5
 }</code></pre>
 <pre class="r"><code>h.funct(runif(1,1,2.5))</code></pre>
-<pre><code>## [1] -8.931539</code></pre>
+<pre><code>## [1] -1.966801</code></pre>
 <p>This function returns one observation from the random variable <span class="math inline">\(Y = h(X)\)</span>.</p>
 <p>If we repeat the procedure <span class="math inline">\(n\)</span> times, we get a sample <span class="math inline">\(Y_1, \dots, Y_n\)</span> from the distribution of <span class="math inline">\(Y\)</span>.</p>
 <pre class="r"><code>n = 10000 
 y.sample  = replicate(n, h.funct(runif(1, 1, 2.5)))
 y.average = mean(y.sample)
 y.average</code></pre>
-<pre><code>## [1] -1.462809</code></pre>
+<pre><code>## [1] -1.379159</code></pre>
 </div>
 <div id="strange-transformations-of-random-variables" class="section level2">
 <h2>“Strange” Transformations of Random Variables</h2>
@@ -124,11 +124,11 @@ y.sample  = replicate(n, h.funct() ) </code></pre>
 <p>We can use the sample average of this new sample to estimate the population mean of the variable <span class="math inline">\(Y\)</span>.</p>
 <pre class="r"><code>y.average = mean(y.sample)
 y.average</code></pre>
-<pre><code>## [1] 2.7236</code></pre>
+<pre><code>## [1] 2.719</code></pre>
 <p><strong>Little side remark:</strong> Does it remind you of anything? It turns out that <span class="math inline">\(\mathbb{E}[Y]=e\)</span>, so this is just another way to define Euler’s number.</p>
 <p>This is good already, but we can do more! We have an entire sample <span class="math inline">\(Y_1,\dots,Y_n\)</span> generated from the unknown distribution of <span class="math inline">\(Y\)</span>, which we can use to carry on any kind of inference procedure (which is something useless at this point of the course but please keep it in mind, it will be extremely important later on!). As for now the only thing you can do is to analyse the distribution of <span class="math inline">\(Y\)</span> looking at the histogram:</p>
 <pre class="r"><code>hist(y.sample, col=rgb(.6,0,.4,.3))</code></pre>
-<p><img src="/post_en/montecarlo_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="/post_en/montecarlo_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="monte-carlo-for-the-coupon-problem" class="section level2">
 <h2>Monte Carlo for the Coupon Problem</h2>
@@ -145,8 +145,8 @@ y.average</code></pre>
 <p>It turns out that this is a well known probability problem, so much so that it has its own name: <strong>the Coupon problem</strong>.</p>
 <p>Let us rewrite it a more rigorous way, and let us simplify the problem a little bit by assuming that all Pokemon appear with the same probability. Denote by <span class="math inline">\(X_i\)</span> the number of encounters it takes for the player to find the <span class="math inline">\(i-th\)</span> new Pokemon after the <span class="math inline">\((i-1)\)</span>-th Pokemon has been caught. Clearly <span class="math inline">\(\mathbb{E}[X_1] =1\)</span> because the player starts with no Pokemon. After the <span class="math inline">\((i-1)\)</span>-th Pokemon has been caught, there are <span class="math inline">\(145 - (i-1)\)</span> possible Pokemon that could be the new <span class="math inline">\(i\)</span>-th Pokemon. We can interpret the process of waiting for the new <span class="math inline">\(i\)</span>-th Pokemon as a geometric distribution, where each trial is meeting a Pokemon, the “success” is getting any of the <span class="math inline">\(n-(i-1)\)</span> unobserved Pokemon and “failure” is getting a duplicate of something we already have.</p>
 <p>We can thus assume that <span class="math inline">\(X_i- 1 \sim Geom(p_i)\)</span>, and use properties of the distribution to find that <span class="math inline">\(\mathbb{E}[X_i] =\frac{1}{p_i}\)</span>.</p>
-<p>Remember, we are interested in the number of encounters we need to capture all Pokemon <span class="math inline">\(Y\)</span>, which is the sum of the <span class="math inline">\(X_i\)</span>. In theory you could solve this problem with the tools that you already have (+ pen and paper), in fact, by linearity of the expected value, the problem consists in computing a bunch of expected values for Geometric distributions, i.e. <span class="math display">\[ \mathbb{E}[Y] = \mathbb{E}[X_1 +\dots +X_{145}] = \mathbb{E}[X_1] + \dots \mathbb{E}[X_{145}]\]</span>.</p>
-<p>The “tricky” part here is how to compute the parameter <span class="math inline">\(p_i\)</span> of the Geometric distribution. If we assume that all the Pokemon have the same probability of appearing we have that, the probability of meeting the <span class="math inline">\(i\)</span>-th new Pokemon, given that you already met <span class="math inline">\((i-1)\)</span> distinct Pokemon is <span class="math display">\[p_i=\frac{145-(i-1)}{145}\]</span>. In practice however, if we remove the oversimplifying assumption that all Pokemon have the same probability of appearing, computing this probability becomes rather long and tedious (although it is possible). Monte Carlo provides a fast (and almost brainless!) alternative. First thing first: load the data.</p>
+<p>Remember, we are interested in the number of encounters we need to capture all Pokemon <span class="math inline">\(Y\)</span>, which is the sum of the <span class="math inline">\(X_i\)</span>. In theory you could solve this problem with the tools that you already have (+ pen and paper), in fact, by linearity of the expected value, the problem consists in computing a bunch of expected values for Geometric distributions, i.e. <span class="math display">\[ \mathbb{E}[Y] = \mathbb{E}[X_1 +\dots +X_{145}] = \mathbb{E}[X_1] + \dots \mathbb{E}[X_{145}].\]</span></p>
+<p>The “tricky” part here is how to compute the parameter <span class="math inline">\(p_i\)</span> of the Geometric distribution. If we assume that all the Pokemon have the same probability of appearing we have that, the probability of meeting the <span class="math inline">\(i\)</span>-th new Pokemon, given that you already met <span class="math inline">\((i-1)\)</span> distinct Pokemon is <span class="math display">\[p_i=\frac{145-(i-1)}{145}.\]</span> In practice however, if we remove the oversimplifying assumption that all Pokemon have the same probability of appearing, computing this probability becomes rather long and tedious (although it is possible). Monte Carlo provides a fast (and almost brainless!) alternative. First thing first: load the data.</p>
 <pre class="r"><code>library(readr)
 spawn &lt;- read_csv(&quot;spawn-by-typ.csv&quot;)</code></pre>
 <pre><code>## Parsed with column specification:
@@ -178,8 +178,8 @@ sum(spawn_prob)</code></pre>
 y.sample  = replicate(n,simulate.catch.them.all(10))
 y.average = mean(y.sample)
 y.average</code></pre>
-<pre><code>## [1] 13.963</code></pre>
-<p>This means that in order to get 10 different Pokemon we need to run into 13.963 Pokemon.</p>
+<pre><code>## [1] 14.097</code></pre>
+<p>This means that in order to get 10 different Pokemon we need to run into 14.097 Pokemon.</p>
 </div>
 
   </article>

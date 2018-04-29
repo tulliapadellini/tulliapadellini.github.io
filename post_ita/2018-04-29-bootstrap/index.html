@@ -119,7 +119,7 @@
 <pre class="r"><code>hist(Xn, col=rgb(1,0,0,.3), probability = T, main=&quot;&quot;)
 hist(Xstar, add=TRUE, col=rgb(0,0,1,.3), probability = T)
 curve(dnorm, col=&quot;red&quot;, lwd=3, add=TRUE)</code></pre>
-<p><img src="/post_ita/2018-04-29-bootstrap_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="/post_ita/2018-04-29-bootstrap_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>La ragione per cui scegliamo <span class="math inline">\(\mathbb{F}_n\)</span> come stima di <span class="math inline">\(F\)</span> è che al crescere della numerosità campionaria <span class="math inline">\(n\)</span>, le due distribuzioni sono equivalenti.</p>
 <pre class="r"><code>Xn = rnorm(10000)
 Xstar = sample(Xn, size=10000, replace=TRUE)
@@ -127,7 +127,7 @@ Xstar = sample(Xn, size=10000, replace=TRUE)
 hist(Xn, col=rgb(1,0,0,.3), probability = T)
 hist(Xstar, add=TRUE, col=rgb(0,0,1,.3), probability = T)
 curve(dnorm, col=&quot;red&quot;, lwd=3, add=TRUE)</code></pre>
-<p><img src="/post_ita/2018-04-29-bootstrap_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="/post_ita/2018-04-29-bootstrap_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div id="esempio-bootstrap-per-la-mediana" class="section level4">
 <h4>ESEMPIO: Bootstrap per la mediana</h4>
 <p>Ora (finalmente!) vediamo come calcolare la stima bootstrap della varianza di una statistica, in particolare scegliamo <span class="math inline">\(T_n = \text{Mediana}(X_1,\dots, X_n)\)</span>.</p>
@@ -146,10 +146,10 @@ boot.median=function(X, B=10000){
 boot.emp = boot.median(Xn)</code></pre>
 <p>L’approssimazione di <span class="math inline">\(\mathbb{V}_{\hat{F}} [T_n]\)</span> è:</p>
 <pre class="r"><code>var(boot.emp)</code></pre>
-<pre><code>## [1] 0.005462682</code></pre>
+<pre><code>## [1] 0.005744378</code></pre>
 <p>Il vettore <code>Tstar</code> contiene il campione <span class="math inline">\(T_{n,1}^*,\dots, T_{n,B}^*\)</span>, possiamo analizzarne la distribuzione campionaria:</p>
 <pre class="r"><code>hist(boot.emp, col=rgb(.0,.6,.3,.3), probability = T)</code></pre>
-<p><img src="/post_ita/2018-04-29-bootstrap_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="/post_ita/2018-04-29-bootstrap_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="bootstrap-parametrico" class="section level3">
@@ -176,11 +176,11 @@ lambda = optim(par=1, LL)$par</code></pre>
 boot.param = param.boot.median(Xn, thetahat = lambda)</code></pre>
 <p>L’approssimazione di <span class="math inline">\(\mathbb{V}_{\hat{F}} [T_n]\)</span> è:</p>
 <pre class="r"><code>var(boot.param)</code></pre>
-<pre><code>## [1] 0.008916187</code></pre>
+<pre><code>## [1] 0.008358497</code></pre>
 <p>Il vettore <code>Tstar</code> contiene il campione <span class="math inline">\(T_{n,1}^*,\dots, T_{n,B}^*\)</span>, possiamo analizzarne la distribuzione campionaria:</p>
 <pre class="r"><code>hist(boot.emp, col=rgb(0,.6,0.3,.3), probability = T, main = &quot;&quot;)
 hist(boot.param, col=rgb(0,.1,.6,.3), probability = T, add=TRUE)</code></pre>
-<p><img src="/post_ita/2018-04-29-bootstrap_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="/post_ita/2018-04-29-bootstrap_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div id="bootstrap-empirico-vs-parametrico" class="section level5">
 <h5>Bootstrap Empirico vs Parametrico</h5>
 <ul>
@@ -198,16 +198,16 @@ hist(boot.param, col=rgb(0,.1,.6,.3), probability = T, add=TRUE)</code></pre>
 <p>Se la statistica <span class="math inline">\(T_n\)</span> ha distribuzione approssimativamente normale, possiamo utilizzare <span class="math display">\[T_n \pm z_{1-\alpha/2} \sqrt{vboot} \]</span></p>
 <p>Consideriamo l’esempio dell’esponenziale. In questo caso la distribuzione campionaria della statistica <span class="math inline">\(T_n =\text(Mediana)(X_1,\dots,X_n)\)</span> può essere considerata normale:</p>
 <pre class="r"><code>hist(boot.param, col=rgb(.1,.0,.6,.3), prob=TRUE)</code></pre>
-<p><img src="/post_ita/2018-04-29-bootstrap_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="/post_ita/2018-04-29-bootstrap_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>qqnorm(boot.param, pch=20, col=rgb(.8,0,.4,.4))
 qqline(boot.param)</code></pre>
-<p><img src="/post_ita/2018-04-29-bootstrap_files/figure-html/unnamed-chunk-12-2.png" width="672" /></p>
+<p><img src="/post_ita/2018-04-29-bootstrap_files/figure-html/unnamed-chunk-12-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>L’intervallo di confidenza per <span class="math inline">\(T_n\)</span> è quindi:</p>
 <pre class="r"><code>L.int = Tn - 1.96 * sd(boot.param)
 U.int = Tn + 1.96 * sd(boot.param)
 N.int = c(L.int, U.int)
 N.int</code></pre>
-<pre><code>## [1] 0.4505019 0.8206501</code></pre>
+<pre><code>## [1] 0.4623120 0.8206972</code></pre>
 </div>
 <div id="percentili" class="section level4">
 <h4>2. Percentili</h4>
@@ -215,7 +215,7 @@ N.int</code></pre>
 <pre class="r"><code>Perc.int = quantile(boot.param, c(0.025, 0.975))
 Perc.int</code></pre>
 <pre><code>##      2.5%     97.5% 
-## 0.4887328 0.8613137</code></pre>
+## 0.4775163 0.8382797</code></pre>
 </div>
 <div id="quantita-pivotali" class="section level4">
 <h4>3. Quantità pivotali</h4>
@@ -223,7 +223,7 @@ Perc.int</code></pre>
 <pre class="r"><code>Pivot.int = c(2*Tn - quantile(boot.param, c(0.975, 0.025))) 
 Pivot.int</code></pre>
 <pre><code>##     97.5%      2.5% 
-## 0.4098382 0.7824191</code></pre>
+## 0.4447295 0.8054929</code></pre>
 <p><strong>EXTRA - “Studentizzazione”:</strong> Il metodo delle quantità pivotali standard si basa sull’assunzione che <span class="math inline">\(T_n - T\)</span> e <span class="math inline">\(T^*_n - T_n\)</span> abbiano approssimativamente la stessa distribuzione. Quando questo non è vero, si può ricorrere alla studentizzazione, ossia considerare: <span class="math display">\[\tau = \frac{T_n - T}{\sqrt{\mathbb{V}[T_n]}} \]</span> <span class="math display">\[\tau^* = \frac{T^*_n - T_n}{\sqrt{\mathbb{V}[T^*_n]}} \]</span></p>
 <p>Il vantaggio delle quantità “studentizzate” <span class="math inline">\(\tau\)</span> e <span class="math inline">\(\tau^*\)</span> è che hanno approssimativamente la stessa distribuzione anche quando <span class="math inline">\(T_n - T\)</span> e <span class="math inline">\(T^*_n - T_n\)</span> hanno distribuzioni diverse. Lo svantaggio di questo metodo è che richiedono un secondo giro di bootstrap per stimare la quantitè <span class="math inline">\(\sqrt{\mathbb{V}[T^*_n]}\)</span></p>
 </div>
@@ -252,22 +252,22 @@ Tn</code></pre>
 boot.faith = boot.max(Xn)</code></pre>
 <p>La distribuzione campionaria di <span class="math inline">\(X_n\)</span> stimata con il bootstrap è un po’ “strana”.</p>
 <pre class="r"><code>hist(boot.faith$Tstar, probability = TRUE, col=rgb(.9,0,0,.3), main=&quot;&quot;)</code></pre>
-<p><img src="/post_ita/2018-04-29-bootstrap_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p><img src="/post_ita/2018-04-29-bootstrap_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Cerchiamo di capire se è un caso isolato o se c’è un problema di fondo. Siano <span class="math inline">\(X_1,\dots,X_n\sim U(0, \theta)\)</span>, e sia <span class="math inline">\(\hat{\theta}=X_{(n)}=max\{X_1,\dots,X_n\}\)</span>. Poniamo <span class="math inline">\(\theta=1\)</span> e generiamo un campione di <span class="math inline">\(n=50\)</span> osservazioni:</p>
 <pre class="r"><code>Xn = runif(50)
 Tn = max(Xn)
 Tn</code></pre>
-<pre><code>## [1] 0.995068</code></pre>
+<pre><code>## [1] 0.9879518</code></pre>
 <pre class="r"><code>boot.prova = boot.max(Xn)</code></pre>
 <p>Ricordiamo che nel caso di <span class="math inline">\(X_1,\dots,X_n\sim U(0, \theta)\)</span> la distribuzione di <span class="math inline">\(X_{(n)}\)</span> è <span class="math display">\[\mathbb{P}(X_{(n)}&lt;x)= \left(\frac{x}{\theta}\right)^n.\]</span> Confrontiamo la distribuzione stimata dal bootstrap con quella teorica (in blu).</p>
 <pre class="r"><code>hist(boot.prova$Tstar, breaks=seq(0,1.3,by=0.05), prob= T, main=&quot;&quot;, col=rgb(.3,0.3,.7,.3))
 curve(x^50, add=T, col=&quot;darkblue&quot;, lwd=4)</code></pre>
-<p><img src="/post_ita/2018-04-29-bootstrap_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p><img src="/post_ita/2018-04-29-bootstrap_files/figure-html/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Le due distribuzioni sembrano comportarsi in modo diverso. Vediamo quali sono gli effetti di questa differenza sulla stima intervallare: Costruiamo 1000 intervalli bootstrap e vediamo la proporzione di questi in cui è contenuto il vero valore del parametro <span class="math inline">\(\theta=1\)</span>:</p>
 <pre class="r"><code>boot.cis = replicate(1000, boot.max(X = runif(50), B = 1000)$int.boot)
 true.coverage = mean((1 &gt;= boot.cis[1, ]) &amp; (1 &lt;= boot.cis[2, ]))
 true.coverage</code></pre>
-<pre><code>## [1] 0.86</code></pre>
+<pre><code>## [1] 0.857</code></pre>
 <p>La copertura degli intervalli è decisamente inferiore a <span class="math inline">\(0.95\)</span>! In generale il bootstrap si comporta “male” nelle stime degli estremi.</p>
 <p>Una possibile soluzione a questo problema è utilizzare un altro metodo di ricampionamento, il <em>subsampling</em>. In sostanza il subsampling è molto simile al bootstrap empirico, solo che al posto di ricampionare con ripetizione <span class="math inline">\(n\)</span> elementi dai dati osservati, il campione di subsampling viene creato estraendo senza ripetizione <span class="math inline">\(m\)</span> unitè dal campione originale (<span class="math inline">\(m\)</span> deve essere piccolo).</p>
 <pre class="r"><code>sub.max=function(X, B=10000, m){
@@ -285,13 +285,13 @@ true.coverage</code></pre>
 Xn = runif(50)
 Tn = max(Xn)
 Tn</code></pre>
-<pre><code>## [1] 0.9926264</code></pre>
+<pre><code>## [1] 0.980899</code></pre>
 <pre class="r"><code>sub.prova = sub.max(Xn, m=20)</code></pre>
 <p>Analizziamo ora la copertura degli intervalli creati con il subsampling:</p>
 <pre class="r"><code>sub.cis = replicate(1000, sub.max(X = runif(50), B = 1000, m=25)$int.sub)
 true.coverage = mean((1 &gt;= sub.cis[1, ]) &amp; (1 &lt;= sub.cis[2, ]))
 true.coverage</code></pre>
-<pre><code>## [1] 0.936</code></pre>
+<pre><code>## [1] 0.959</code></pre>
 </div>
 
   </article>
