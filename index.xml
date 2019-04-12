@@ -50,9 +50,17 @@ Using more formulas, we can write the LLN as \[ \bar{X}_n = \frac{1}{n}\sum_{i=1
       <description>img { display: block; margin-left: auto; margin-right: auto; }  education @ Liceo Classico Tito Lucrezio Caro:
  2010 &amp;ndash; Maturità Classica  
 @ Sapienza Università di Roma:
- 2013 &amp;ndash; Bachelor in Statistics and Economics 2015 &amp;ndash; Master in Statistics and Decision Sciences (EuroBayes program)  
-out of school I live for boring documentaries, trash music, junk food &amp;amp; fancy ice-cream.
-I spent some time in Finland (in the winter) and Saudi Arabia (in the summer).</description>
+ 2013 &amp;ndash; Bachelor in Statistics and Economics 2015 &amp;ndash; Master in Statistics and Decision Sciences (EuroBayes program) 2019 &amp;ndash; PhD in Metodological Statistics  
+out of school I live for boring documentaries, trash music, junk food &amp;amp; fancy ice-cream.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/google887f8702c0c8fb10/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/google887f8702c0c8fb10/</guid>
+      <description>google-site-verification: google887f8702c0c8fb10.</description>
     </item>
     
     <item>
@@ -61,7 +69,11 @@ I spent some time in Finland (in the winter) and Saudi Arabia (in the summer).</
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/teaching/</guid>
-      <description> where &amp;amp; when to find me:  office hours: tuesday 9 &amp;ndash; 11 address: stanza 41 &amp;ndash; Dipartimento di Scienze Statistiche, Piazzale Aldo Moro 5, 00185, Rome, ITALY  Material &amp;amp; Lecture notes  [EN] - Some stuff covered in class [ITA] - Cose viste a lezione  </description>
+      <description>This semester I am tutoring for the bachelor course of Statistics and I am in charge of the Digital Skills - R course, both at LUISS.
+&amp;nbsp;
+I help out here and there with courses of the DSS, Statistical Learning above all.
+&amp;nbsp; &amp;nbsp;
+where &amp;amp; when to find me:  address: stanza 13 &amp;ndash; Dipartimento di Scienze Statistiche, Piazzale Aldo Moro 5, 00185, Rome, ITALY office hours:  @Sapienza: tuesday 9 &amp;ndash; 11 @LUISS: friday 11 &amp;ndash; 12   &amp;nbsp; &amp;nbsp;</description>
     </item>
     
     <item>
@@ -70,7 +82,9 @@ I spent some time in Finland (in the winter) and Saudi Arabia (in the summer).</
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/blog/</guid>
-      <description>Together with two smarter &amp;amp; prettier (but equally nerd) guys, I am working on a blog.</description>
+      <description>Together with two smarter &amp;amp; prettier (but equally nerd) guys, I tried blogging.
+&amp;nbsp; &amp;nbsp;
+Our original plan was to use it to procrastinate the real work we were supposed to do, but we quickly became such pros that we managed to procrastinate procrastination. It will be updated at some point.</description>
     </item>
     
     <item>
@@ -79,7 +93,8 @@ I spent some time in Finland (in the winter) and Saudi Arabia (in the summer).</
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/research/</guid>
-      <description>My two (main) topics of interest are Quantile Regression and Topological Data Analysis &amp;ndash; more specifically:  Model-based Quantile Regression for Discrete Data
+      <description>My two (main) topics of interest are Quantile Regression and Topological Data Analysis.
+During my PhD this was materialized in what follows:  Model-based Quantile Regression for Discrete Data
  Supervised Learning with Indefinite Topological Kernels
  Persistence Flamelets: multiscale Persistent Homology for kernel density exploration
   
@@ -92,10 +107,17 @@ My fear of commitment forces me to study also other, unrelated, things.</descrip
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/talks/</guid>
-      <description>[2018]
- (upcoming) CMS-Statistics ISBA World Meeting Riunione Scientifica SIS Start-UP Research follow UP Young Researcher Memotef  [2017]
- IBS - Channel Section Riunione Intermedia SIS  [2016]
- Riunione Scientifica SIS  </description>
+      <description>[2019]
+CRONOS meeting &amp;ndash; April, Limassol (CY) [talk] Topological low dimensional learning of high dimensional time series
+&amp;nbsp; &amp;nbsp;
+[2018]
+CMS-Statistics &amp;ndash; 14-16 December, Pisa (IT) [talk] Topological Invariants for high-dimensional Time Series
+&amp;nbsp;
+KAUST Statistics Workshop &amp;ndash; November, Thuwal (KSA) [poster] Predicting Dengue Epidemics in Brazil using Quantile Regression
+&amp;nbsp;
+ISBA World Meeting &amp;ndash; June, Edinburgh (UK) [poster] Bayesian Quantile Regression for Discrete Data
+&amp;nbsp;
+Riunione Scientifica SIS &amp;ndash; June, Palermo (IT) [talk] Indefinite Topological Kernels</description>
     </item>
     
   </channel>
