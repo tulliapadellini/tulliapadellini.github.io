@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Tullia Padellini</title>
+    <link>/post/</link>
+    <description>Recent content in Posts on Tullia Padellini</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 16 Jun 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>prova</title>
+      <link>/2019/06/16/code/</link>
+      <pubDate>Sun, 16 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/06/16/code/</guid>
+      <description>I am the proud mantainer of the following R-packages:
+
+kernelTDA with Francesco Palini &amp;amp; Pierpaolo Brutti
+Tools for Statistical Learning with Topological Summaries. It focuses on Kernel methods for Topological Data Analysis, implementing the most famous Kernel functions defined on the space of Persistence Diagrams and a solver for SVM with indefinite kernels (or SVM in Reproducible Kernel Krein Space) to exploit them. Additionally it provides an R interface to the C++ library HERA, which allows to efficently compute Wasserstein distances between Persistence Diagrams.</description>
+    </item>
+    
+  </channel>
+</rss>
