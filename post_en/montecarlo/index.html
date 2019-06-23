@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name="author" content="Tullia Padellini">
-    <meta name="description" content="PhD student in Statistics at Sapienza University of Rome">
+    <meta name="description" content="Post-doc in Statistics at Sapienza University of Rome">
     <meta name="keywords" content="[still very much under construction]">
 
     <base href="/">
@@ -73,7 +73,8 @@
 <p>Remember the (weak) Law of Large Numbers? Just a quick recap: if <span class="math inline">\(X_1,\dots, X_n\)</span> are i.i.d. random variables from a distribution <span class="math inline">\(F\)</span> with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span>, then the sample mean <span class="math inline">\(\bar{X}_n\)</span> converges in probability to the population mean <span class="math inline">\(\mu\)</span>.</p>
 <p>Using more formulas, we can write the LLN as <span class="math display">\[ \bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i  \rightarrow \mu =\int xdF(x)\]</span> as <span class="math inline">\(n\rightarrow \infty\)</span>. One way to look at this is that, if the sample size <span class="math inline">\(n\)</span> is “close to infinity” (or more generally, if <span class="math inline">\(n\)</span> is “large enough”), then we have <span class="math display">\[\frac{1}{n}\sum_{i=1}^n X_i \approx \int xdF. \]</span></p>
 <p>This means that, if we are able to simulate an arbitrarily large amount of observations <span class="math inline">\(X_i\)</span> from <span class="math inline">\(F\)</span>, then we can approximate arbitrarily well the mean <span class="math inline">\(\mu\)</span> of the distribution just by sample average.</p>
-<p>But this is not all! The best part is that by the LLS (Law of the Lazy Statistician) we also have that <span class="math display">\[\frac{1}{n}\sum_{i=1}^n h(X_i) \approx \int h(x)dF .\]</span> In some sense, we are saying that <strong>if we are able to sample from the distribution <span class="math inline">\(F\)</span>, we can approximate arbitrarily complex integrals</strong>.</p>
+<p>But this is not all! The best part is that by the LLS (Law of the Lazy Statistician) we also have that <span class="math display">\[\frac{1}{n}\sum_{i=1}^n h(X_i) \approx \int h(x)dF .\]</span>
+In some sense, we are saying that <strong>if we are able to sample from the distribution <span class="math inline">\(F\)</span>, we can approximate arbitrarily complex integrals</strong>.</p>
 <p>You may not see it straight away but this has <strong>huge</strong> consequences, such as: <em>you may not ever have to solve an integral analytically again</em>… Easy to see why LLN is an important result, right?</p>
 <p>Using simulations from known random variables to approximate integrals is the core concept of the so-called <strong>Monte Carlo methods</strong>. In general, Monte Carlo methods are numerical techniques which rely on random sampling to approximate their results.</p>
 <p>Incidentally, Monte Carlo <a href="http://www.nowozin.net/sebastian/blog/history-of-monte-carlo-methods-part-1.html">has a pretty interesting history</a>, and dates back to von Neumann and the Manhattan Project (although some claims that the first Monte Carlo was used to solve the problem of <a href="https://en.wikipedia.org/wiki/Buffon%27s_needle">Buffon’s needle</a> almost <span class="math inline">\(200\)</span> years before).</p>
@@ -85,24 +86,30 @@
 <p>Remember that the density <span class="math inline">\(f_U(x)\)</span> of a continuous uniform random variable <span class="math inline">\(U\sim(a,b)\)</span> is <span class="math display">\[f_U (x) = \begin{cases} \frac{1}{b-a} &amp; x\in[a,b]\\
 0 &amp; \text{otherwise}
 \end{cases}\]</span></p>
-<p>For <span class="math inline">\(a =1\)</span> and <span class="math inline">\(b=2.5\)</span> we have: <span class="math display">\[f_U (x) = \begin{cases} \frac{1}{1.5} &amp; x\in[1,2.5]\\
+<p>For <span class="math inline">\(a =1\)</span> and <span class="math inline">\(b=2.5\)</span> we have:
+<span class="math display">\[f_U (x) = \begin{cases} \frac{1}{1.5} &amp; x\in[1,2.5]\\
 0 &amp; \text{otherwise}
 \end{cases}\]</span></p>
-<p>This is enough to write the previous integral as an expectation: <span class="math display">\[ \int^{2.5} _1 \frac{\sec x + \tan x}{(\sec x -\tan x)(4\tan ^2 x)^2} 8 \sec ^2 x \cdot 1\cdot d x =\]</span> <span class="math display">\[ = \int^{2.5} _1 \frac{\sec x + \tan x}{(\sec x -\tan x)(4\tan ^2 x)^2} 8 \sec ^2 x \cdot \frac{1.5}{1.5}d x = \]</span> <span class="math display">\[ = \int^{2.5} _1 \frac{\sec x + \tan x}{(\sec x -\tan x)(4\tan ^2 x)^2} 8 \sec ^2 x \cdot 1.5 f_U(x)d x = \]</span> <span class="math display">\[  = \int^{2.5} _1 \frac{\sec x + \tan x}{(\sec x -\tan x)(4\tan ^2 x)^2} 8 \sec ^2 x 1.5 d F_U(x) =\]</span> <span class="math display">\[  = \int^{2.5} _1 h(x) d F_U(x) = \mathbb{E}_{F_U}[h(X)] \]</span></p>
+<p>This is enough to write the previous integral as an expectation:
+<span class="math display">\[ \int^{2.5} _1 \frac{\sec x + \tan x}{(\sec x -\tan x)(4\tan ^2 x)^2} 8 \sec ^2 x \cdot 1\cdot d x =\]</span>
+<span class="math display">\[ = \int^{2.5} _1 \frac{\sec x + \tan x}{(\sec x -\tan x)(4\tan ^2 x)^2} 8 \sec ^2 x \cdot \frac{1.5}{1.5}d x = \]</span>
+<span class="math display">\[ = \int^{2.5} _1 \frac{\sec x + \tan x}{(\sec x -\tan x)(4\tan ^2 x)^2} 8 \sec ^2 x \cdot 1.5 f_U(x)d x = \]</span>
+<span class="math display">\[  = \int^{2.5} _1 \frac{\sec x + \tan x}{(\sec x -\tan x)(4\tan ^2 x)^2} 8 \sec ^2 x 1.5 d F_U(x) =\]</span>
+<span class="math display">\[  = \int^{2.5} _1 h(x) d F_U(x) = \mathbb{E}_{F_U}[h(X)] \]</span></p>
 <pre class="r"><code>h.funct = function(x){
   num   = 1/cos(x) + tan(x)
   denom = (1/cos(x) - tan(x))*(4*tan(x)^2)^2
   num/denom * 8 * 1/cos(x) * 1.5
 }</code></pre>
 <pre class="r"><code>h.funct(runif(1,1,2.5))</code></pre>
-<pre><code>## [1] -1.966801</code></pre>
+<pre><code>## [1] 0.2030125</code></pre>
 <p>This function returns one observation from the random variable <span class="math inline">\(Y = h(X)\)</span>.</p>
 <p>If we repeat the procedure <span class="math inline">\(n\)</span> times, we get a sample <span class="math inline">\(Y_1, \dots, Y_n\)</span> from the distribution of <span class="math inline">\(Y\)</span>.</p>
 <pre class="r"><code>n = 10000 
 y.sample  = replicate(n, h.funct(runif(1, 1, 2.5)))
 y.average = mean(y.sample)
 y.average</code></pre>
-<pre><code>## [1] -1.379159</code></pre>
+<pre><code>## [1] -1.459875</code></pre>
 </div>
 <div id="strange-transformations-of-random-variables" class="section level2">
 <h2>“Strange” Transformations of Random Variables</h2>
@@ -124,7 +131,7 @@ y.sample  = replicate(n, h.funct() ) </code></pre>
 <p>We can use the sample average of this new sample to estimate the population mean of the variable <span class="math inline">\(Y\)</span>.</p>
 <pre class="r"><code>y.average = mean(y.sample)
 y.average</code></pre>
-<pre><code>## [1] 2.719</code></pre>
+<pre><code>## [1] 2.7133</code></pre>
 <p><strong>Little side remark:</strong> Does it remind you of anything? It turns out that <span class="math inline">\(\mathbb{E}[Y]=e\)</span>, so this is just another way to define Euler’s number.</p>
 <p>This is good already, but we can do more! We have an entire sample <span class="math inline">\(Y_1,\dots,Y_n\)</span> generated from the unknown distribution of <span class="math inline">\(Y\)</span>, which we can use to carry on any kind of inference procedure (which is something useless at this point of the course but please keep it in mind, it will be extremely important later on!). As for now the only thing you can do is to analyse the distribution of <span class="math inline">\(Y\)</span> looking at the histogram:</p>
 <pre class="r"><code>hist(y.sample, col=rgb(.6,0,.4,.3))</code></pre>
@@ -143,16 +150,20 @@ y.average</code></pre>
 <p>and then iterate the procedure until you had all of the 145 available Pokemon.</p>
 <p>Different Pokemon have different probability of appearing, so you could meet the same common Pokemon many many times before meeting a new rare one. Typically you would end up with a lot of Pidgeys and no Snorlaxes, and it might take a while to complete your pokedex (i.e. catch all the Pokemon). Before starting this battery-draining adventure, you might want to know: how long will it take to catch one for each kind of Pokemon? How many Pokemon do I need to encounter in order to end the game?</p>
 <p>It turns out that this is a well known probability problem, so much so that it has its own name: <strong>the Coupon problem</strong>.</p>
-<p>Let us rewrite it a more rigorous way, and let us simplify the problem a little bit by assuming that all Pokemon appear with the same probability. Denote by <span class="math inline">\(X_i\)</span> the number of encounters it takes for the player to find the <span class="math inline">\(i-th\)</span> new Pokemon after the <span class="math inline">\((i-1)\)</span>-th Pokemon has been caught. Clearly <span class="math inline">\(\mathbb{E}[X_1] =1\)</span> because the player starts with no Pokemon. After the <span class="math inline">\((i-1)\)</span>-th Pokemon has been caught, there are <span class="math inline">\(145 - (i-1)\)</span> possible Pokemon that could be the new <span class="math inline">\(i\)</span>-th Pokemon. We can interpret the process of waiting for the new <span class="math inline">\(i\)</span>-th Pokemon as a geometric distribution, where each trial is meeting a Pokemon, the “success” is getting any of the <span class="math inline">\(n-(i-1)\)</span> unobserved Pokemon and “failure” is getting a duplicate of something we already have.</p>
+<p>Let us rewrite it a more rigorous way, and let us simplify the problem a little bit by assuming that all Pokemon appear with the same probability.
+Denote by <span class="math inline">\(X_i\)</span> the number of encounters it takes for the player to find the <span class="math inline">\(i-th\)</span> new Pokemon after the <span class="math inline">\((i-1)\)</span>-th Pokemon has been caught. Clearly <span class="math inline">\(\mathbb{E}[X_1] =1\)</span> because the player starts with no Pokemon. After the <span class="math inline">\((i-1)\)</span>-th Pokemon has been caught, there are <span class="math inline">\(145 - (i-1)\)</span> possible Pokemon that could be the new <span class="math inline">\(i\)</span>-th Pokemon. We can interpret the process of waiting for the new <span class="math inline">\(i\)</span>-th Pokemon as a geometric distribution, where each trial is meeting a Pokemon, the “success” is getting any of the <span class="math inline">\(n-(i-1)\)</span> unobserved Pokemon and “failure” is getting a duplicate of something we already have.</p>
 <p>We can thus assume that <span class="math inline">\(X_i- 1 \sim Geom(p_i)\)</span>, and use properties of the distribution to find that <span class="math inline">\(\mathbb{E}[X_i] =\frac{1}{p_i}\)</span>.</p>
-<p>Remember, we are interested in the number of encounters we need to capture all Pokemon <span class="math inline">\(Y\)</span>, which is the sum of the <span class="math inline">\(X_i\)</span>. In theory you could solve this problem with the tools that you already have (+ pen and paper), in fact, by linearity of the expected value, the problem consists in computing a bunch of expected values for Geometric distributions, i.e. <span class="math display">\[ \mathbb{E}[Y] = \mathbb{E}[X_1 +\dots +X_{145}] = \mathbb{E}[X_1] + \dots \mathbb{E}[X_{145}].\]</span></p>
-<p>The “tricky” part here is how to compute the parameter <span class="math inline">\(p_i\)</span> of the Geometric distribution. If we assume that all the Pokemon have the same probability of appearing we have that, the probability of meeting the <span class="math inline">\(i\)</span>-th new Pokemon, given that you already met <span class="math inline">\((i-1)\)</span> distinct Pokemon is <span class="math display">\[p_i=\frac{145-(i-1)}{145}.\]</span> In practice however, if we remove the oversimplifying assumption that all Pokemon have the same probability of appearing, computing this probability becomes rather long and tedious (although it is possible). Monte Carlo provides a fast (and almost brainless!) alternative. First thing first: load the data.</p>
+<p>Remember, we are interested in the number of encounters we need to capture all Pokemon <span class="math inline">\(Y\)</span>, which is the sum of the <span class="math inline">\(X_i\)</span>.
+In theory you could solve this problem with the tools that you already have (+ pen and paper), in fact, by linearity of the expected value, the problem consists in computing a bunch of expected values for Geometric distributions, i.e. <span class="math display">\[ \mathbb{E}[Y] = \mathbb{E}[X_1 +\dots +X_{145}] = \mathbb{E}[X_1] + \dots \mathbb{E}[X_{145}].\]</span></p>
+<p>The “tricky” part here is how to compute the parameter <span class="math inline">\(p_i\)</span> of the Geometric distribution. If we assume that all the Pokemon have the same probability of appearing we have that, the probability of meeting the <span class="math inline">\(i\)</span>-th new Pokemon, given that you already met <span class="math inline">\((i-1)\)</span> distinct Pokemon is <span class="math display">\[p_i=\frac{145-(i-1)}{145}.\]</span>
+In practice however, if we remove the oversimplifying assumption that all Pokemon have the same probability of appearing, computing this probability becomes rather long and tedious (although it is possible). Monte Carlo provides a fast (and almost brainless!) alternative.
+First thing first: load the data.</p>
 <pre class="r"><code>library(readr)
 spawn &lt;- read_csv(&quot;spawn-by-typ.csv&quot;)</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
-##   pokemon_id = col_integer(),
-##   appeareances = col_integer()
+##   pokemon_id = col_double(),
+##   appeareances = col_double()
 ## )</code></pre>
 <p>Then define the sample space and the probability of encountering a Pokemon:</p>
 <pre class="r"><code>pokemon_sample_space = spawn$pokemon_id
@@ -178,8 +189,8 @@ sum(spawn_prob)</code></pre>
 y.sample  = replicate(n,simulate.catch.them.all(10))
 y.average = mean(y.sample)
 y.average</code></pre>
-<pre><code>## [1] 14.097</code></pre>
-<p>This means that in order to get 10 different Pokemon we need to run into 14.097 Pokemon.</p>
+<pre><code>## [1] 14.192</code></pre>
+<p>This means that in order to get 10 different Pokemon we need to run into 14.192 Pokemon.</p>
 </div>
 
   </article>
@@ -197,7 +208,7 @@ src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
 <footer class="footer">
   <section class="container">
 
-  <font size=1> © 2018 - Powered by <a href="https://gohugo.io/">Hugo</a> with much help from <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.</font>
+  <font size=1> © 2019 - Powered by <a href="https://gohugo.io/">Hugo</a> with much help from <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.</font>
     
   
     
