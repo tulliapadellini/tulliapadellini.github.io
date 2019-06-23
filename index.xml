@@ -110,7 +110,9 @@ During my PhD this was materialized in what follows:  Model-based Quantile Regre
  Supervised Learning with Indefinite Topological Kernels
  Persistence Flamelets: multiscale Persistent Homology for kernel density exploration
   
-My fear of commitment forces me to study also other, unrelated, things.</description>
+As of now I am working on
+ Regression trees for mixed type data (including Topological summaries!)
+ Wasserstein distance for sample size determination, with applications to clinical trials</description>
     </item>
     
     <item>
