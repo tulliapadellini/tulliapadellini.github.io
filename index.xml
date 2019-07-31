@@ -122,7 +122,9 @@ During my PhD this was materialized in what follows:  Model-based Quantile Regre
  Supervised Learning with Indefinite Topological Kernels
  Persistence Flamelets: multiscale Persistent Homology for kernel density exploration
   
-My fear of commitment forces me to study also other, unrelated, things.</description>
+Now I am working on
+ Regression trees for mixed type data (including Topological summaries!)
+ Wasserstein distance for sample size determination, with applications to clinical trials</description>
     </item>
     
     <item>
@@ -132,6 +134,9 @@ My fear of commitment forces me to study also other, unrelated, things.</descrip
       
       <guid>/talks/</guid>
       <description>[2019]
+European Meeting of Statisticians &amp;ndash; July, Palermo (IT)
+Persistent homology for kernel density exploration
+&amp;nbsp; &amp;nbsp;
 Networking IBS Regions &amp;ndash; July, Naples (IT) [best oral presentation award - slides]
 Wasserstein Consensus for Bayesian Sample Size Determinations
 &amp;nbsp; &amp;nbsp;
@@ -140,10 +145,7 @@ Topological low dimensional learning of high dimensional time series
 &amp;nbsp; &amp;nbsp;
 [2018]
 CMS-Statistics &amp;ndash; December, Pisa (IT) [talk]
-Topological Invariants for high-dimensional Time Series
-&amp;nbsp;
-KAUST Statistics Workshop &amp;ndash; November, Thuwal (KSA) [poster]
-Predicting Dengue Epidemics in Brazil using Quantile Regression</description>
+Topological Invariants for high-dimensional Time Series</description>
     </item>
     
     <item>
