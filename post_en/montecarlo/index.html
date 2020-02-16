@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name="author" content="Tullia Padellini">
-    <meta name="description" content="Post-doc in Statistics at Sapienza University of Rome">
+    <meta name="description" content="Research Associate in Spatial Statistics and Epidemiology at Imperial College London">
     <meta name="keywords" content="[still very much under construction]">
 
     <base href="/">
@@ -25,7 +25,7 @@
 
     
 
-    <meta name="generator" content="Hugo 0.39" />
+    <meta name="generator" content="Hugo 0.59.1" />
   </head>
 
   <body>
@@ -68,7 +68,10 @@
       <h1>Basic Monte Carlo</h1>
     </header>
 
-    <div id="the-intuition" class="section level2">
+    
+
+
+<div id="the-intuition" class="section level2">
 <h2>The intuition:</h2>
 <p>Remember the (weak) Law of Large Numbers? Just a quick recap: if <span class="math inline">\(X_1,\dots, X_n\)</span> are i.i.d. random variables from a distribution <span class="math inline">\(F\)</span> with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span>, then the sample mean <span class="math inline">\(\bar{X}_n\)</span> converges in probability to the population mean <span class="math inline">\(\mu\)</span>.</p>
 <p>Using more formulas, we can write the LLN as <span class="math display">\[ \bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i  \rightarrow \mu =\int xdF(x)\]</span> as <span class="math inline">\(n\rightarrow \infty\)</span>. One way to look at this is that, if the sample size <span class="math inline">\(n\)</span> is “close to infinity” (or more generally, if <span class="math inline">\(n\)</span> is “large enough”), then we have <span class="math display">\[\frac{1}{n}\sum_{i=1}^n X_i \approx \int xdF. \]</span></p>

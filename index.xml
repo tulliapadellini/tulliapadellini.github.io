@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tullia Padellini</title>
@@ -59,11 +59,11 @@ Using more formulas, we can write the LLN as \[ \bar{X}_n = \frac{1}{n}\sum_{i=1
       <pubDate>Thu, 01 Jan 1970 01:33:39 +0100</pubDate>
       
       <guid>/about/</guid>
-      <description>img { display: block; margin-left: auto; margin-right: auto; }  education @ Liceo Classico Tito Lucrezio Caro:
+      <description>img { display: block; margin-left: auto; margin-right: auto; }  I am a Research Associate in Spatial Statistics and Epidemiology in the School of Public Health of Imperial College London. Previously I was a post-doc in the Department of Statistical Sciences of Sapienza University of Rome.
+education @ Liceo Classico Tito Lucrezio Caro:
  2010 &amp;ndash; Maturità Classica  
 @ Sapienza Università di Roma:
- 2013 &amp;ndash; Bachelor in Statistics and Economics 2015 &amp;ndash; Master in Statistics and Decision Sciences (EuroBayes program) 2019 &amp;ndash; PhD in Metodological Statistics  
-out of school I live for boring documentaries, trash music, junk food &amp;amp; fancy ice-cream.</description>
+ 2013 &amp;ndash; Bachelor in Statistics and Economics 2015 &amp;ndash; Master in Statistics and Decision Sciences (EuroBayes program) 2019 &amp;ndash; PhD in Metodological Statistics</description>
     </item>
     
     <item>
@@ -82,7 +82,7 @@ out of school I live for boring documentaries, trash music, junk food &amp;amp; 
       
       <guid>/teaching/</guid>
       <description>where &amp;amp; when to find me:  address: stanza 39 &amp;ndash; Dipartimento di Scienze Statistiche, Piazzale Aldo Moro 5, 00185, Rome, ITALY office hours:  @Sapienza: tuesday 9 &amp;ndash; 11 @LUISS: by appointment   &amp;nbsp; &amp;nbsp;
-Teaching I am teaching the Preparatory R Course for the Bachelor&amp;rsquo;s degree in Bioinformatics at Sapienza Università di Roma. Course material can be found here.
+Teaching Last year I was teaching the Preparatory R Course for the Bachelor&amp;rsquo;s degree in Bioinformatics at Sapienza Università di Roma. Course material can be found here.
 &amp;nbsp;
 I was also in charge of the Preparatory Course in Statistics for the Ms courses in Economics and Finance and Banking at Università di Roma - Torvergata.</description>
     </item>
@@ -127,26 +127,6 @@ Now I am working on
     </item>
     
     <item>
-      <title>Talks</title>
-      <link>/talks/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/talks/</guid>
-      <description>[2019]
-Complex-Simplex Workshop &amp;ndash; October, Turin (IT) [talk]
-Persistence Flamelets: Persistent Homology for scale spaces
-&amp;nbsp; &amp;nbsp;
-IBIG II Forum &amp;ndash; October, Milan (IT) [talk]
-Bayesian Sample Size Determination with Wasserstein Consensus
-&amp;nbsp; &amp;nbsp;
-European Meeting of Statisticians &amp;ndash; July, Palermo (IT) [talk]
-Persistent homology for kernel density exploration
-&amp;nbsp; &amp;nbsp;
-Networking IBS Regions &amp;ndash; July, Naples (IT) [best oral presentation award - slides]
-Wasserstein Consensus for Bayesian Sample Size Determination</description>
-    </item>
-    
-    <item>
       <title>software</title>
       <link>/software/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -156,6 +136,27 @@ Wasserstein Consensus for Bayesian Sample Size Determination</description>
 
 kernelTDA with Francesco Palini &amp;amp; Pierpaolo Brutti
 Tools for Statistical Learning with Topological Summaries. It focuses on Kernel methods for Topological Data Analysis, implementing the most famous Kernel functions defined on the space of Persistence Diagrams and a solver for SVM with indefinite kernels (or SVM in Reproducible Kernel Krein Space) to exploit them. Additionally it provides an R interface to the C++ library HERA, which allows to efficently compute Wasserstein distances between Persistence Diagrams.</description>
+    </item>
+    
+    <item>
+      <title>Talks</title>
+      <link>/talks/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/talks/</guid>
+      <description>[2020]
+AIROYoung Workshop &amp;ndash; February, Bolzano (IT)[talk]
+[2019]
+Complex-Simplex Workshop &amp;ndash; October, Turin (IT) [talk]
+Persistence Flamelets: Persistent Homology for scale spaces
+&amp;nbsp; &amp;nbsp;
+IBIG II Forum &amp;ndash; October, Milan (IT) [talk]
+Bayesian Sample Size Determination with Wasserstein Consensus
+&amp;nbsp; &amp;nbsp;
+European Meeting of Statisticians &amp;ndash; July, Palermo (IT) [talk]
+Persistent homology for kernel density exploration
+&amp;nbsp; &amp;nbsp;
+Networking IBS Regions &amp;ndash; July, Naples (IT) [best oral presentation award - slides]</description>
     </item>
     
   </channel>
