@@ -1,0 +1,121 @@
+---
+title: Home
+weight: -270
+output: md_document
+---
+
+<style>
+.column {
+  float: left;
+}
+
+.left {
+  width: 30%;
+}
+
+.right {
+  width:70%;
+}
+</style>
+
+
+<div class="row">
+  <div class="column">
+\
+\
+  **Post Doc in Spatial Statistics for Epidemiology** \
+  \
+  \
+ Department of Epidemiology and Biostatistics  \
+ *School of Public Health*  \
+ **Imperial College London** \
+  </div>
+  
+<div class="column">
+
+<img align = "right"
+     src="images/me.png"
+     width =75%
+     style="float: right; margin-right: 10px;   border-radius: 40px; vertical-align: middle;" />
+</div>
+</div>
+
+<br>
+
+<style>
+.row {
+  display: flex;
+}
+
+.column {
+  flex: 50%;
+}
+</style>
+
+
+
+
+I am part of the [Environment and Health Statistics Group](https://sites.google.com/view/envstats/home)
+at the [MRC Centre for Environment and Health](https://www.environment-health.ac.uk), 
+where I work with [Marta Blangiardo](https://www.imperial.ac.uk/people/m.blangiardo) and [Fred Piel](https://www.imperial.ac.uk/people/f.piel) on developing Bayesian models tackling spatial uncertainty. 
+
+Currently I am also involved in the *Statistical Modelling Laboratory* set up by the Royal Statistical Society and the Alan Turing Institute to support the Joint Biosecurity Center COVID-19 response team. 
+
+<!-- <style> -->
+<!-- .column { -->
+<!--   float: left; -->
+<!-- } -->
+
+<!-- .left { -->
+<!--   width: 65%; -->
+<!-- } -->
+
+<!-- .right { -->
+<!--   width: 35%; -->
+<!-- } -->
+<!-- </style> -->
+
+
+<!-- <div class="row"> -->
+<!--   <div class="column"> -->
+
+<!--   **Research Associate in Spatial Statistics for Epidemiology** \ -->
+<!-- *Department of Epidemiology and Biostatistics* \ -->
+<!-- *Imperial College London* -->
+
+<!-- <br> -->
+
+<!--   I am currently part of the [Environment and Health Statistics Group](https://sites.google.com/view/envstats/home) -->
+<!-- at the [MRC Center for](https://www.environment-health.ac.uk), -->
+<!-- where I work under the supervision of [Marta Blangiardo]() and [Fred Piel](). -->
+<!--   </div> -->
+<!--   <div class="column"> -->
+<!-- <img src="images/me.png" -->
+<!--      alt="Markdown Monster icon" -->
+<!--      style="float: left; margin-right: 10px;   border-radius: 40px;" /> -->
+<!-- </div> -->
+
+
+
+<!-- </div> -->
+
+
+<!--   <img src="images/me.png" alt="Markdown Monster icon" style="float: left; margin-right: 10px;" /> -->
+
+
+<!-- ![](images/me.png){ width=300px } -->
+
+
+<!-- <br> -->
+
+
+
+
+<!-- <center> -->
+<!-- ![](images/eden-farm-children-s-village.jpg){ -->
+<!-- width=20% } -->
+<!-- </center> -->
+
+<!-- <img src="images/eden-farm-children-s-village.jpg" -->
+<!--      alt="Markdown Monster icon" -->
+<!--      style="float: left; margin-right: 10px;" /> -->

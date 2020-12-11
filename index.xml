@@ -1,101 +1,30 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tullia Padellini</title>
+    <title>Home on Tullia Padellini</title>
     <link>/</link>
-    <description>Recent content on Tullia Padellini</description>
+    <description>Recent content in Home on Tullia Padellini</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Sun, 16 Jun 2019 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Tue, 15 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>prova</title>
-      <link>/2019/06/16/code/</link>
-      <pubDate>Sun, 16 Jun 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/2019/06/16/code/</guid>
-      <description>I am the proud mantainer of the following R-packages:
-
-kernelTDA with Francesco Palini &amp;amp; Pierpaolo Brutti
-Tools for Statistical Learning with Topological Summaries. It focuses on Kernel methods for Topological Data Analysis, implementing the most famous Kernel functions defined on the space of Persistence Diagrams and a solver for SVM with indefinite kernels (or SVM in Reproducible Kernel Krein Space) to exploit them. Additionally it provides an R interface to the C++ library HERA, which allows to efficently compute Wasserstein distances between Persistence Diagrams.</description>
-    </item>
-    
-    <item>
-      <title>The almighty Bootstrap</title>
-      <link>/post_ita/2018-04-29-bootstrap/</link>
-      <pubDate>Wed, 02 Nov 2016 00:00:00 +0000</pubDate>
-      
-      <guid>/post_ita/2018-04-29-bootstrap/</guid>
-      <description>Ingredienti di base Riprendiamo il classico setup visto ad inferenza, ossia supponiamo di avere un campione \(X_1,\dots X_n\) di variabili indipendenti ed identicamente distribuite (i.i.d.) proveniente da una distribuzione \(F\), dove \(F(x) = \mathbb{P}(X_i\leq x)\).
-Indichiamo con \(\mu_F\) e \(\sigma^2 _F\) rispettivamente la media e la varianza della generica variabile \(X_i\). La notazione con \(F\) sottoscritto serve a ricordare che sia \(\mu_F\) che \(\sigma^2_F\) sono funzioni della funzione di ripartizione, infatti:</description>
-    </item>
-    
-    <item>
-      <title>R - 101</title>
-      <link>/post_ita/lab01/</link>
-      <pubDate>Thu, 13 Oct 2016 00:00:00 +0000</pubDate>
-      
-      <guid>/post_ita/lab01/</guid>
-      <description>Introduzione a R Queste note costituiscono un’introduzione ad R, un linguaggio di programmazione rivolto all’analisi dei dati, utilizzato in statistica e data mining. Perchè proprio R?
- È gratuito: contrariamente ad altri software comunemente utilizzati in ambito economico-statistico (ad esempio SAS, STATA etc), R ? open-source. È aggiornato: quando viene presentata una nuova metodologia di analisi dei dati, molto spesso la prima implementazione ? proprio in R. È redditizio…  Informazioni introduttive possono essere trovate su wikipedia e r-project.</description>
-    </item>
-    
-    <item>
-      <title>Basic Monte Carlo</title>
-      <link>/post_en/montecarlo/</link>
-      <pubDate>Wed, 12 Oct 2016 00:00:00 +0000</pubDate>
-      
-      <guid>/post_en/montecarlo/</guid>
-      <description>The intuition: Remember the (weak) Law of Large Numbers? Just a quick recap: if \(X_1,\dots, X_n\) are i.i.d. random variables from a distribution \(F\) with mean \(\mu\) and variance \(\sigma^2\), then the sample mean \(\bar{X}_n\) converges in probability to the population mean \(\mu\).
-Using more formulas, we can write the LLN as \[ \bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i \rightarrow \mu =\int xdF(x)\] as \(n\rightarrow \infty\). One way to look at this is that, if the sample size \(n\) is “close to infinity” (or more generally, if \(n\) is “large enough”), then we have \[\frac{1}{n}\sum_{i=1}^n X_i \approx \int xdF.</description>
-    </item>
-    
-    <item>
-      <title></title>
+      <title>About</title>
       <link>/about/</link>
-      <pubDate>Thu, 01 Jan 1970 01:33:39 +0100</pubDate>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/about/</guid>
-      <description>img { display: block; margin-left: auto; margin-right: auto; }  I am a Research Associate in Spatial Statistics and Epidemiology in the School of Public Health of Imperial College London. Previously I was a post-doc in the Department of Statistical Sciences of Sapienza University of Rome.
-education @ Liceo Classico Tito Lucrezio Caro:
- 2010 &amp;ndash; Maturità Classica  
-@ Sapienza Università di Roma:
- 2013 &amp;ndash; Bachelor in Statistics and Economics 2015 &amp;ndash; Master in Statistics and Decision Sciences (EuroBayes program) 2019 &amp;ndash; PhD in Metodological Statistics</description>
+      <description>I am a Post Doctoral Research Associate in the Environment and Health Statistics Group of Imperial College London. I am working with Marta Blangiardo and Fred Piel on methods to incorporate spatial uncertainty in hierarchical models, with a special focus on applications in epidemiology and environmental statistics.
+At the moment I am also part of the Statistical Modelling Laboratory set up by the Royal Statistical Society and the Alan Turing Institute to support the Joint Biosecurity Center COVID-19 response.</description>
     </item>
     
     <item>
-      <title></title>
-      <link>/google887f8702c0c8fb10/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <title>Typography</title>
+      <link>/typography/</link>
+      <pubDate>Thu, 28 Sep 2017 08:00:00 +0600</pubDate>
       
-      <guid>/google887f8702c0c8fb10/</guid>
-      <description>google-site-verification: google887f8702c0c8fb10.</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>/teaching/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/teaching/</guid>
-      <description>where &amp;amp; when to find me:  address: stanza 39 &amp;ndash; Dipartimento di Scienze Statistiche, Piazzale Aldo Moro 5, 00185, Rome, ITALY office hours:  @Sapienza: tuesday 9 &amp;ndash; 11 @LUISS: by appointment   &amp;nbsp; &amp;nbsp;
-Teaching Last year I was teaching the Preparatory R Course for the Bachelor&amp;rsquo;s degree in Bioinformatics at Sapienza Università di Roma. Course material can be found here.
-&amp;nbsp;
-I was also in charge of the Preparatory Course in Statistics for the Ms courses in Economics and Finance and Banking at Università di Roma - Torvergata.</description>
-    </item>
-    
-    <item>
-      <title>Blog</title>
-      <link>/blog/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/</guid>
-      <description>Together with two smarter &amp;amp; prettier (but equally nerd) guys, I tried blogging.
-&amp;nbsp; &amp;nbsp;
-Our original plan was to use it to procrastinate the real work we were supposed to do, but we quickly became such pros that we managed to procrastinate procrastination. It will probably never see any update.</description>
+      <guid>/typography/</guid>
+      <description>Here is a paragraph. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Heading 2 Another one. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+Heading 4  First item Second item   Nested unordered item  Third item Nested ordered item 1 Nested ordered item 2  Heading 5 Where are the quotes!</description>
     </item>
     
     <item>
@@ -104,9 +33,7 @@ Our original plan was to use it to procrastinate the real work we were supposed 
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/code/</guid>
-      <description>I am the proud mantainer of the following R-packages:
-
-kernelTDA with Francesco Palini &amp;amp; Pierpaolo Brutti
+      <description>kernelTDA with Francesco Palini &amp;amp; Pierpaolo Brutti
 Tools for Statistical Learning with Topological Summaries. It focuses on Kernel methods for Topological Data Analysis, implementing the most famous Kernel functions defined on the space of Persistence Diagrams and a solver for SVM with indefinite kernels (or SVM in Reproducible Kernel Krein Space) to exploit them. Additionally it provides an R interface to the C++ library HERA, which allows to efficently compute Wasserstein distances between Persistence Diagrams.</description>
     </item>
     
@@ -116,26 +43,9 @@ Tools for Statistical Learning with Topological Summaries. It focuses on Kernel 
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/research/</guid>
-      <description>My two (main) topics of interest are Quantile Regression and Topological Data Analysis.
-During my PhD this was materialized in what follows:  Model-based Quantile Regression for Discrete Data
- Supervised Learning with Indefinite Topological Kernels
- Persistence Flamelets: multiscale Persistent Homology for kernel density exploration
-  
-Now I am working on
- Regression trees for mixed type data (including Topological summaries!)
- Wasserstein distance for sample size determination, with applications to clinical trials</description>
-    </item>
-    
-    <item>
-      <title>software</title>
-      <link>/software/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/software/</guid>
-      <description>I am the proud mantainer of the following R-packages:
-
-kernelTDA with Francesco Palini &amp;amp; Pierpaolo Brutti
-Tools for Statistical Learning with Topological Summaries. It focuses on Kernel methods for Topological Data Analysis, implementing the most famous Kernel functions defined on the space of Persistence Diagrams and a solver for SVM with indefinite kernels (or SVM in Reproducible Kernel Krein Space) to exploit them. Additionally it provides an R interface to the C++ library HERA, which allows to efficently compute Wasserstein distances between Persistence Diagrams.</description>
+      <description>My fear of commitment resulted in me studying many unrelated things.
+COVID19 and Airpollution with Garyfallos Konstantinoudis, Marta Blangiardo, Bethan Davies, James Bennet and Majid Ezzati
+As there has been much discussion on the role played by air-pollution on COVID19 outcomes, we examined the effect of long term exposure to PM2.5 and NO2 on COVID19 deaths in England. As opposed to previous studies (in and outside the UK) that were based on large spatial units and critically neglected the high spatial variability of pollutants (and resulted in poor adjustment for confounders), we focused on very high resolution geographical units, the 32.</description>
     </item>
     
     <item>
@@ -144,19 +54,80 @@ Tools for Statistical Learning with Topological Summaries. It focuses on Kernel 
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/talks/</guid>
-      <description>[2020]
-AIROYoung Workshop &amp;ndash; February, Bolzano (IT)[talk]
-[2019]
-Complex-Simplex Workshop &amp;ndash; October, Turin (IT) [talk]
-Persistence Flamelets: Persistent Homology for scale spaces
-&amp;nbsp; &amp;nbsp;
-IBIG II Forum &amp;ndash; October, Milan (IT) [talk]
-Bayesian Sample Size Determination with Wasserstein Consensus
-&amp;nbsp; &amp;nbsp;
-European Meeting of Statisticians &amp;ndash; July, Palermo (IT) [talk]
+      <description>Selected Talks</description>
+    </item>
+    
+    <item>
+      <title>Talks</title>
+      <link>/talks/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/talks/</guid>
+      <description>[2019]
+European Meeting of Statisticians &amp;ndash; July, Palermo (IT)
 Persistent homology for kernel density exploration
-&amp;nbsp; &amp;nbsp;
-Networking IBS Regions &amp;ndash; July, Naples (IT) [best oral presentation award - slides]</description>
+ Networking IBS Regions &amp;ndash; July, Naples (IT) [best oral presentation award - slides]
+Wasserstein Consensus for Bayesian Sample Size Determinations
+ CRONOS meeting &amp;ndash; April, Limassol (CY) [talk]
+Topological low dimensional learning of high dimensional time series
+ [2018]
+CMS-Statistics &amp;ndash; December, Pisa (IT) [talk]
+Topological Invariants for high-dimensional Time Series
+ KAUST Statistics Workshop &amp;ndash; November, Thuwal (KSA) [poster]</description>
+    </item>
+    
+    <item>
+      <title>Teaching</title>
+      <link>/teaching/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/teaching/</guid>
+      <description>Coming soon</description>
+    </item>
+    
+    <item>
+      <title>Work in Progress</title>
+      <link>/docs/wip/</link>
+      <pubDate>Tue, 15 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/docs/wip/</guid>
+      <description>website is still a work in progress, things may not be where they are supposed to - yet!</description>
+    </item>
+    
+    <item>
+      <title>pflamelet is on CRAN</title>
+      <link>/docs/mrc-talk/</link>
+      <pubDate>Fri, 11 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/docs/mrc-talk/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Talk for the MRC Centre for Environment and Health</title>
+      <link>/docs/copyofcomments-support/</link>
+      <pubDate>Fri, 11 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/docs/copyofcomments-support/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>COVID &#43; Airpollution is in press</title>
+      <link>/docs/comments-support/</link>
+      <pubDate>Thu, 10 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/docs/comments-support/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Search</title>
+      <link>/search/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/search/</guid>
+      <description></description>
     </item>
     
   </channel>

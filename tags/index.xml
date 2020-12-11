@@ -4,11 +4,24 @@
     <title>Tags on Tullia Padellini</title>
     <link>/tags/</link>
     <description>Recent content in Tags on Tullia Padellini</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
+    <generator>Hugo -- gohugo.io</generator><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Configuration</title>
+      <link>/tags/config/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/config/</guid>
+      <description></description>
+    </item>
     
-	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
-    
+    <item>
+      <title>Opengraph</title>
+      <link>/tags/og/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/og/</guid>
+      <description></description>
+    </item>
     
   </channel>
 </rss>

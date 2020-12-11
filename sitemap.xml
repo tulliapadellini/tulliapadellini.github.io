@@ -3,63 +3,77 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/post/</loc>
-    <lastmod>2019-07-04T11:38:44+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/2019/06/16/code/</loc>
-    <lastmod>2019-07-04T11:38:44+02:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/</loc>
-    <lastmod>2019-10-15T22:13:19+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post_ita/</loc>
-    <lastmod>2019-06-16T02:17:56+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post_ita/2018-04-29-bootstrap/</loc>
-    <lastmod>2019-06-16T02:17:56+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post_ita/lab01/</loc>
-    <lastmod>2019-06-16T02:17:56+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post_en/montecarlo/</loc>
-    <lastmod>2019-06-16T02:17:56+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post_en/</loc>
-    <lastmod>2019-06-16T02:17:56+02:00</lastmod>
+    <lastmod>2020-12-15T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/about/</loc>
-    <lastmod>2019-06-16T01:58:50+02:00</lastmod>
   </url>
   
   <url>
-    <loc>/google887f8702c0c8fb10/</loc>
-    <priority>0</priority>
+    <loc>/typography/</loc>
+    <lastmod>2017-09-28T08:00:00+06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/code/</loc>
+  </url>
+  
+  <url>
+    <loc>/research/</loc>
+  </url>
+  
+  <url>
+    <loc>/talks/</loc>
+  </url>
+  
+  <url>
+    <loc>/talks/</loc>
   </url>
   
   <url>
     <loc>/teaching/</loc>
-    <lastmod>2019-10-06T11:07:04+02:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/</loc>
-    <lastmod>2019-10-06T11:04:11+02:00</lastmod>
+    <loc>/docs/</loc>
+    <lastmod>2020-12-15T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/docs/wip/</loc>
+    <lastmod>2020-12-15T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/docs/mrc-talk/</loc>
+    <lastmod>2020-12-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/docs/copyofcomments-support/</loc>
+    <lastmod>2020-12-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/docs/comments-support/</loc>
+    <lastmod>2020-12-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/authors/</loc>
+    <lastmod>2017-09-28T08:00:00+06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/authors/muniftanjim/</loc>
+    <lastmod>2017-09-28T08:00:00+06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/page/</loc>
+    <lastmod>2017-09-28T08:00:00+06:00</lastmod>
   </url>
   
   <url>
@@ -67,27 +81,23 @@
   </url>
   
   <url>
-    <loc>/code/</loc>
-    <lastmod>2019-10-06T11:04:11+02:00</lastmod>
+    <loc>/tags/config/</loc>
   </url>
   
   <url>
-    <loc>/research/</loc>
-    <lastmod>2019-07-31T16:28:48+02:00</lastmod>
+    <loc>/tags/og/</loc>
   </url>
   
   <url>
-    <loc>/software/</loc>
-    <lastmod>2019-07-04T11:38:44+02:00</lastmod>
+    <loc>/search/</loc>
+  </url>
+  
+  <url>
+    <loc>/series/</loc>
   </url>
   
   <url>
     <loc>/tags/</loc>
-  </url>
-  
-  <url>
-    <loc>/talks/</loc>
-    <lastmod>2019-10-15T22:13:19+02:00</lastmod>
   </url>
   
 </urlset>
