@@ -2,26 +2,27 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Home on Tullia Padellini</title>
-    <link>/</link>
+    <link>https://tulliapadellini.github.io/</link>
     <description>Recent content in Home on Tullia Padellini</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Tue, 15 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 15 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://tulliapadellini.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>About</title>
-      <link>/about/</link>
+      <link>https://tulliapadellini.github.io/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/about/</guid>
-      <description>I am a Post Doctoral Research Associate in the Environment and Health Statistics Group of Imperial College London. I am working with Marta Blangiardo and Fred Piel on methods to incorporate spatial uncertainty in hierarchical models, with a special focus on applications in epidemiology and environmental statistics.
-At the moment I am also part of the Statistical Modelling Laboratory set up by the Royal Statistical Society and the Alan Turing Institute to support the Joint Biosecurity Center COVID-19 response.</description>
+      <guid>https://tulliapadellini.github.io/about/</guid>
+      <description>I am currently an Expert (Statistics) in the Statistical Analysis Directorate of the Bank of Italy.
+In my past life, I was a Post Doctoral Research Associate in the Environment and Health Statistics Group of Imperial College London, where I was working with Marta Blangiardo.
+While at Imperial, I have also been part of the Statistical Modelling Laboratory set up by the Royal Statistical Society and the Alan Turing Institute to support the UK Health Security Agency (UKHSA) COVID-19 response.</description>
     </item>
     
     <item>
       <title>Typography</title>
-      <link>/typography/</link>
+      <link>https://tulliapadellini.github.io/typography/</link>
       <pubDate>Thu, 28 Sep 2017 08:00:00 +0600</pubDate>
       
-      <guid>/typography/</guid>
+      <guid>https://tulliapadellini.github.io/typography/</guid>
       <description>Here is a paragraph. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 Heading 2 Another one. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 Heading 4  First item Second item   Nested unordered item  Third item Nested ordered item 1 Nested ordered item 2  Heading 5 Where are the quotes!</description>
@@ -29,40 +30,41 @@ Heading 4  First item Second item   Nested unordered item  Third item Nested ord
     
     <item>
       <title>Code</title>
-      <link>/code/</link>
+      <link>https://tulliapadellini.github.io/code/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/code/</guid>
-      <description>kernelTDA with Francesco Palini &amp;amp; Pierpaolo Brutti
-Tools for Statistical Learning with Topological Summaries. It focuses on Kernel methods for Topological Data Analysis, implementing the most famous Kernel functions defined on the space of Persistence Diagrams and a solver for SVM with indefinite kernels (or SVM in Reproducible Kernel Krein Space) to exploit them. Additionally it provides an R interface to the C++ library HERA, which allows to efficently compute Wasserstein distances between Persistence Diagrams.</description>
+      <guid>https://tulliapadellini.github.io/code/</guid>
+      <description>Most of the code I wrote for my analyses can be found on github.
+  Covid and Equalities &amp;ndash; this repository contains code to run analyses described in Time varying association between deprivation, ethnicity and SARS-CoV-2 infections in England: an ecological space-time study.
+  Quantile Regression &amp;ndash; this vignette illustrates how to implement the models described in Model aware quantile regression for discrete data with a focus on disease mapping.</description>
     </item>
     
     <item>
       <title>Research</title>
-      <link>/research/</link>
+      <link>https://tulliapadellini.github.io/research/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/research/</guid>
-      <description>My fear of commitment resulted in me studying many unrelated things.
-COVID19 and Airpollution with Garyfallos Konstantinoudis, Marta Blangiardo, Bethan Davies, James Bennet and Majid Ezzati
-As there has been much discussion on the role played by air-pollution on COVID19 outcomes, we examined the effect of long term exposure to PM2.5 and NO2 on COVID19 deaths in England. As opposed to previous studies (in and outside the UK) that were based on large spatial units and critically neglected the high spatial variability of pollutants (and resulted in poor adjustment for confounders), we focused on very high resolution geographical units, the 32.</description>
+      <guid>https://tulliapadellini.github.io/research/</guid>
+      <description>My fear of commitment resulted in me studying many unrelated things. An updated list of publications and working papers can be found on my scholar page.
+COVID-19 COVID-19 Infections and health equalities with Marta Blangiardo, Radka Jersakova, Brieuc Lehmann, George Nicholson, Peter Diggle, Sylvia Richardson, Chris Holmes (&amp;amp; more)
+Ethnically diverse and socio-economically deprived communities have been differentially affected by the COVID-19 pandemic in the UK. In this work we investigated the impact of such inequalities by assessing the effect of area level deprivation and ethnicity on two different metrics of COVID-19 burden, test positivity and prevalence.</description>
     </item>
     
     <item>
       <title>Talks</title>
-      <link>/talks/</link>
+      <link>https://tulliapadellini.github.io/talks/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/talks/</guid>
+      <guid>https://tulliapadellini.github.io/talks/</guid>
       <description>Selected Talks</description>
     </item>
     
     <item>
       <title>Talks</title>
-      <link>/talks/</link>
+      <link>https://tulliapadellini.github.io/talks/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/talks/</guid>
+      <guid>https://tulliapadellini.github.io/talks/</guid>
       <description>[2019]
 European Meeting of Statisticians &amp;ndash; July, Palermo (IT)
 Persistent homology for kernel density exploration
@@ -78,55 +80,64 @@ Topological Invariants for high-dimensional Time Series
     
     <item>
       <title>Teaching</title>
-      <link>/teaching/</link>
+      <link>https://tulliapadellini.github.io/teaching/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/teaching/</guid>
+      <guid>https://tulliapadellini.github.io/teaching/</guid>
       <description>Coming soon</description>
     </item>
     
     <item>
       <title>Work in Progress</title>
-      <link>/docs/wip/</link>
+      <link>https://tulliapadellini.github.io/docs/nimble_course/</link>
       <pubDate>Tue, 15 Dec 2020 00:00:00 +0000</pubDate>
       
-      <guid>/docs/wip/</guid>
+      <guid>https://tulliapadellini.github.io/docs/nimble_course/</guid>
+      <description>website is still a work in progress, things may not be where they are supposed to - yet!</description>
+    </item>
+    
+    <item>
+      <title>Work in Progress</title>
+      <link>https://tulliapadellini.github.io/docs/wip/</link>
+      <pubDate>Tue, 15 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://tulliapadellini.github.io/docs/wip/</guid>
       <description>website is still a work in progress, things may not be where they are supposed to - yet!</description>
     </item>
     
     <item>
       <title>pflamelet is on CRAN</title>
-      <link>/docs/mrc-talk/</link>
+      <link>https://tulliapadellini.github.io/docs/mrc-talk/</link>
       <pubDate>Fri, 11 Dec 2020 00:00:00 +0000</pubDate>
       
-      <guid>/docs/mrc-talk/</guid>
+      <guid>https://tulliapadellini.github.io/docs/mrc-talk/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Talk for the MRC Centre for Environment and Health</title>
-      <link>/docs/copyofcomments-support/</link>
+      <link>https://tulliapadellini.github.io/docs/copyofcomments-support/</link>
       <pubDate>Fri, 11 Dec 2020 00:00:00 +0000</pubDate>
       
-      <guid>/docs/copyofcomments-support/</guid>
+      <guid>https://tulliapadellini.github.io/docs/copyofcomments-support/</guid>
       <description></description>
     </item>
     
     <item>
       <title>COVID &#43; Airpollution is in press</title>
-      <link>/docs/comments-support/</link>
+      <link>https://tulliapadellini.github.io/docs/comments-support/</link>
       <pubDate>Thu, 10 Dec 2020 00:00:00 +0000</pubDate>
       
-      <guid>/docs/comments-support/</guid>
+      <guid>https://tulliapadellini.github.io/docs/comments-support/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Search</title>
-      <link>/search/</link>
+      <link>https://tulliapadellini.github.io/search/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/search/</guid>
+      <guid>https://tulliapadellini.github.io/search/</guid>
       <description></description>
     </item>
     

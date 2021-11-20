@@ -23,12 +23,12 @@ output: md_document
   <div class="column">
 \
 \
-  **Post Doc in Spatial Statistics for Epidemiology** \
-  \
-  \
- Department of Epidemiology and Biostatistics  \
- *School of Public Health*  \
- **Imperial College London** \
+  **Statistician -- Expert** \
+  *Statistical Analysis Directorate* \
+
+ DG Economics,
+ Statistics and Research \
+ **Bank of Italy** \
   </div>
   
 <div class="column">
@@ -52,14 +52,6 @@ output: md_document
 }
 </style>
 
-
-
-
-I am part of the [Environment and Health Statistics Group](https://sites.google.com/view/envstats/home)
-at the [MRC Centre for Environment and Health](https://www.environment-health.ac.uk), 
-where I work with [Marta Blangiardo](https://www.imperial.ac.uk/people/m.blangiardo) and [Fred Piel](https://www.imperial.ac.uk/people/f.piel) on developing Bayesian models tackling spatial uncertainty. 
-
-Currently I am also involved in the *Statistical Modelling Laboratory* set up by the Royal Statistical Society and the Alan Turing Institute to support the Joint Biosecurity Center COVID-19 response team. 
 
 <!-- <style> -->
 <!-- .column { -->
