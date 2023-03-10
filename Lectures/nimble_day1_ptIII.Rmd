@@ -1,0 +1,629 @@
+---
+title: "Some more advanced NIMBLE programming"
+subtitle: "Spatial and spatio-temporal models with NIMBLE"
+author: "Tullia Padellini"
+date: "1 July 2021"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, cache = TRUE, fig.align = 'center', fig.width = 10)
+```
+
+So far we run the MCMC algorithm using the function `nimbleMCMC`. This approach 
+circumvents the longer (but more flexible) approach of using `nimbleModel`,
+`configureMCMC`, `buildMCMC`, `compileNimble`, and `runMCMC`. 
+
+The advantage of the longer approach is that it allows to customize the MCMC run. 
+In this last part we will show how to do so, focusing on each of these function separately. 
+
+In a nutshell:
+
+* `nimbleModel` allows you to explore the dependency structure of your model, as well as computing quantites such as the log-likelihood of one or more nodes. This will also allow you to simulate from your model. 
+
+* `configureMCMC` allows you to customize your MCMC algorithm, by blocking parameters, setting samplers and specifying tuning parameter for the MCMC run. By default `nimble` uses a Gibbs sampler when possible, although the function `configureMCMC`
+allows you to choose between a variety of samplers (including samplers you may create yourself!)
+
+* `buildMCMC` and `compileNimble` are the core of the nimble fitting procedure and build and compile the C++ function needed to efficiently run the MCMC algorithm of your choice
+
+* `runMCMC` is the call to actually generate posterior samples (and their summaries) and it's the last step of the fitting procedure. 
+
+## `nimbleModel`
+
+The function `nimbleModel` creates an object in `R` which allows you to:
+
+ - Get or set parameter or data values.
+ - Determine graph relationships.
+ - Calculate log probabilities.
+ - Simulate (draw) from distributions.
+
+Let's consider a very simple example to explore this function a bit better. 
+```{r}
+library(nimble)
+
+
+code <- nimbleCode({
+  alpha ~ dnorm(0, sd = 1000)
+  beta ~ dnorm(0, sd = 1000)
+  sigma ~ dunif(0, 100)
+  
+  
+  for(i in 1:4) {
+    lin_pred[i] <- alpha + beta * x[i]
+    y[i] ~ dnorm(lin_pred[i], sd = sigma)
+  }
+})
+
+
+set.seed(111)
+x <- runif(4)
+y <- c(rnorm(3 + 0.5*x[1:3]), NA)
+
+model <- nimbleModel(code, 
+                     data  = list(y = y, x = x),
+                     inits = list(alpha = 0.5, 
+                                  beta = 0.2, 
+                                  sigma = 1))
+```
+
+For consistency with WinBUGS/JAGS we will include the covariates in the data, however, 
+`x` values are neither observations ('data') nor parameters. `x` can also be provided in `constants` (this is best when you don't plan to change `x`) or in `inits`.
+
+
+Get names of nodes in the graph: 
+```{r}
+model$getNodeNames()
+```
+
+and filter them by type. 
+```{r}
+model$getNodeNames(determOnly = TRUE)
+```
+
+```{r}
+model$getNodeNames(determOnly = TRUE)
+```
+We can access and modify inputs from the `model` object, for example: 
+
+```{r}
+model$y
+model$x
+model$x[2] <- NA
+model$x
+
+model$y[3] <- NA
+```
+
+
+<br>
+<br>
+
+`NIMBLE` represent the model as a graph, which can be visualized using the package `igraph`. (This example is taken from Paciorek)
+
+
+```{r, linmodel-graph, echo = FALSE}
+layout <- matrix(ncol = 2, byrow = TRUE,
+   # These seem to be rescaled to fit in the plot area,
+   # so I'll just use 0-100 as the scale
+                 data = c(33, 100,
+                          66, 100,
+                          50, 0, # first three are parameters
+                          15, 50, 35, 50, 55, 50, 75, 50, # x's
+                          20, 75, 40, 75, 60, 75, 80, 75, # lin_pred's
+                          25, 25, 45, 25, 65, 25, 85, 25) # y's
+                 )
+
+sizes <- c(45, 30, 30,
+           rep(20, 4),
+           rep(50, 4),
+           rep(20, 4))
+
+edge.color <- "black"
+stoch.color <- "deepskyblue2"
+det.color <- "orchid3"
+rhs.color <- "gray73"
+fill.color <- c(
+    rep(stoch.color, 3),
+    rep(rhs.color, 4),
+    rep(det.color, 4),
+    rep(stoch.color, 4)
+)
+
+plot(model$graph, 
+     vertex.shape = "crectangle",
+     vertex.size = sizes,
+     vertex.size2 = 20,
+     layout = layout,
+     vertex.label.cex = 1.0,
+     vertex.color = fill.color,
+     edge.width = 3,
+     asp = 0.5,
+     edge.color = edge.color)
+
+
+```
+
+```{r}
+plot(model$graph)
+```
+
+In more complicated models it may be confusing to see this graph, we can still access the dependencies though:
+
+```{r}
+model$getDependencies("x[2]")
+```
+```{r}
+model$getDependencies("sigma")
+```
+```{r}
+model$getDependencies("beta")
+```
+
+<!-- # Nodes vs. variables -->
+
+<!-- In NIMBLE: -->
+
+<!-- - A variable is an object that may contain multiple nodes.   -->
+
+<!--     - `y` is a variable. -->
+
+<!-- - A node is a part of a variable declared in one line of BUGS code. -->
+
+<!--     - `y[1]` ... `y[4]` are scalar nodes. -->
+
+<br>
+
+#### Variables and vectorized nodes
+As we have seen earlier, it is possible to declare multidimensional variables in multiple ways, when we declare them simultanously we create one single node containing them. Let us see what happens in the toy example we just saw:
+```{r}
+code2 <- nimbleCode({
+  alpha ~ dnorm(0, sd = 1000)
+  beta ~ dnorm(0, sd = 1000)
+  sigma ~ dunif(0, 100)
+  
+  lin_pred[1:4] <- alpha + beta * x[1:4] # vectorized node
+  
+  for(i in 1:4) {
+    y[i] ~ dnorm(lin_pred[i], sd = sigma)
+  }
+})
+
+model2 <- nimbleModel(code2, 
+                      data = list(y = y, x = x), 
+                      inits = list(alpha = 0.5, 
+                                   beta = 0.2,  
+                                   sigma = 1))
+```
+
+The nodes in the vectorized model are different than before:
+```{r}
+model2$getNodeNames()
+```
+
+
+The biggest difference between the two models is in the dependency structure: 
+```{r}
+model$getDependencies('lin_pred[2]')
+# model$getDependencies('lin_pred[2]', self = F)
+
+model2$getDependencies('lin_pred[2]')
+#model2$getDependencies('lin_pred[2]', self = F)
+```
+
+```{r}
+model$getDependencies('x[2]')
+model2$getDependencies('x[2]')
+```
+Since the linear predictor `lin_pred` is now **one** multivariate node, `x[2]` depends on the whole linear predictor, which in turns affect all the variables `y`. The number of dependencies of `x[2]` is larger in the second specification of the model. Notice that in this case, since `x[2]` does not have a probability distribution it does not show in the dependencies. If `x[2]`  had a prior and was being sampled in MCMC though, the vectorization would imply that we would need to compute all of `y[1]`, `y[2]`, `y[3]`, `y[4]` for each update of `x[2]`.
+
+<br>
+<br>
+
+The vectorization does not change the values of the probabilities assigned to each variable (regardless of the fact that it may be composed of several univariate nodes or one multivariate nodes)
+```{r}
+model$calculate('lin_pred[1:4]')
+model2$calculate('lin_pred[1:4]')
+```
+This is the sum of log probabilities of all stochastic nodes in the calculation.
+
+Deterministic nodes have their values calculated but contribute 0 to the log probability.
+```{r}
+model2$getDependencies('alpha')
+model2$calculate(model2$getDependencies('alpha'))
+```
+In this case, this is the sum of log probabilities from almost the entire model, but the priors for `alpga` and `sigma` are not included, in fact
+
+```{r}
+model2$getDependencies('alpha')
+```
+
+
+### Simulate 
+Finally, one of the most useful features of the `nimbleModel` function is that it creates a model structure we can simulate from. This is especially critical when you are working with a complicated model and you want to assess whether your model is well specified or there are identifiability issues, but can also be used if you are not using nimble for the fitting procedure but you want to check the performances of your method on a simulated dataset. 
+
+<br>
+
+We will consider now a slightly more complicated model than the basic regression seen so far. Let us consider a model with a temporal structure. Let us $Y_t$ be a time series, that is the case where our observations are indexed by time $t$. We assume that the value of $Y_t$ depends on the value of the process at the previous time 
+
+\[Y_t = \mu + \rho Y_{t-1} *\varepsilon_t\]
+
+where $\mu$ is an intercept which does not depend on time. This model is called autoregressive of order 1, as each observation of time $t$ depends on the one at time $t-1$, and $\rho$ is the parameter of the autoregressive. If we consider $t-k$ lags we call the process an autoregressive of order $k$. 
+For the sake of simplicity we consider the case of Gaussian error with zero-mean, i.e. 
+\[\varepsilon_t \sim N(0, \sigma^2)\]
+
+In a fully bayesian fashion we set the priors for all the model parameters. We select non informative Gaussian priors for $\alpha$ and the global mean $\mu$ and we choose a Gamma prior for the precision $\tau = {1}/{\sigma^2}$. The parameter $\alpha$ is assumed to follow a Uniform distribution between $-1$ and $1$.
+
+<br>
+
+This model corresponds to the following nimble code:
+
+```{r, eval=TRUE}
+AR1code <- nimbleCode({
+
+y_pred[1] <- y0
+y[1] ~ dnorm(y_pred[1], tau = tau)
+
+   for(t in 2:TT) {
+      y_pred[t] <- mu + rho * y[t-1] 
+      y[t] ~ dnorm(y_pred[t], tau = tau)  
+   }
+
+# priors on parameters
+mu ~ dnorm(0, tau = 0.001) # intercept
+rho ~ dunif(-1, 1) # coefficient of AR
+
+tau ~ dgamma(1, 0.01)
+
+})
+
+```
+
+```{r}
+
+AR1model <- nimbleModel(AR1code, constants = list(TT = 100, y0 = 0),
+                        inits = list(rho = 0.95, tau = 10, mu = 1))
+
+AR1model$calculate('y[1]')
+```
+Note that the message lets us know that some variables are not initialized – in this case, all y. If we try to calculate the log probabilities of these nodes at this point, we’ll get NA.
+
+The intuitive thing to do to simulate `y` would be to run the following code
+```{r}
+AR1model$simulate("y")
+```
+
+however, since it depends on variables that need to be simulated as well, we need to sample from the whole model. 
+
+We select the nodes to simulate from:
+
+```{r}
+nodesToSim <- AR1model$getDependencies(c("rho", "tau", "mu"),
+                                         self = F, downstream = T)
+nodesToSim
+```
+
+```{r, eval = TRUE}
+# AR1model$y
+
+AR1model$simulate(nodesToSim)
+AR1model$y
+
+```
+
+We can use this to see what is the role of the parameter $\rho$ by sampling from a couple of different values:
+```{r, eval = TRUE, echo = FALSE}
+AR1model_rho0 <- nimbleModel(AR1code, constants = list(TT = 100, y0 = 0),
+                                inits = list(rho = 0, tau = 10, mu = 1))
+
+AR1model_rho0.3 <- nimbleModel(AR1code, constants = list(TT = 100, y0 = 0),
+                                inits = list(rho = 0.5, tau = 10, mu = 1))
+
+AR1model_rhoneg0.3 <- nimbleModel(AR1code, constants = list(TT = 100, y0 = 0),
+                                inits = list(rho = -0.95, tau = 10, mu = 1))
+
+
+sim_df <- data.frame(x = 1:100, y = AR1model$y, rho = rep(0.95, 100))
+
+nodesToSim <- AR1model_rho0$getDependencies(c("rho", "tau", "mu"),
+                                         self = F, downstream = T)
+AR1model_rho0$simulate(nodesToSim)
+sim_df <- rbind(sim_df,  data.frame(x = 1:100, y = AR1model_rho0$y, rho = rep(0, 100)))
+
+
+
+library(ggplot2)
+library(viridis)
+ggplot(sim_df, aes(x = x , y = y, color =factor(rho))) + geom_point() + geom_line() + theme_minimal() + labs(color = "rho") + scale_color_viridis_d(option = "A", begin = 0.3, end = 0.7)
+
+```
+
+
+## `configureMCMC`
+
+```{r}
+mcmcConf <- configureMCMC(model)
+
+AR1mcmcConf<- configureMCMC(AR1model)
+```
+
+For a more complicated example let us go back to the malaria prevalence example
+```{r}
+
+gambiaCode <- nimbleCode({
+	   for( i in 1 : N ) {
+		    y[i] ~ dbin(p[i], 1)
+ 	      logit(p[i]) <- beta0 + inprod(beta[], x[i,])  
+	   }
+
+
+    beta0 ~ dnorm(0, sd = 10)
+    B0 <- exp(beta0)
+    
+    for( j in 1:K){
+	    beta[j] ~ dnorm(0, sd = 10)
+      B[j] <- exp(beta[j])
+    }
+
+})
+```
+
+Let us create the data object.
+```{r}
+library(geoR)
+data(gambia)
+gambia <- gambia[1:200,]
+
+
+N <- nrow(gambia) # reduce the dimension of the data to speed up computation
+
+y <- gambia$pos
+
+# remove the coordinates and the response variable from the dataset:
+x <- as.matrix(gambia[, c("age", "netuse", "treated", "phc")])
+
+regConsts <- list(K = 4, N = N)
+regData   <- list(y = y, x = x)
+
+regInits  <- list(beta0 = 0, beta = rep(0, 4))
+
+gambia_model <- nimbleModel(code = gambiaCode, 
+                            constants = regConsts,
+                            data = regData, 
+                            inits = regInits)
+
+gambia_conf <- configureMCMC(gambia_model)
+
+```
+
+While `configureMCMC` automatically sets some sampler, we can remove them and replace them. Sampler already implemented in `nimble` are:
+
+- random-walk Metropolis-Hastings sampler (adaptive)
+- slice sampler
+- binary (for Bernoulli variables)
+- categorical (these are *costly*).
+- posterior predictive sampler (for no dependencies)
+- elliptical slice sampler (for certain MVN cases).
+- CAR (conditional autoregression model) normal sampler
+- CAR proper sampler
+- random-walk multinomial sampler (adaptive)
+- random-walk Dirichlet sampler (adaptive)
+- cross-level sampler
+- `RW_llFunction` A random-walk Metropolis-Hastings that calls any log-likelihood 
+  function you provide.
+- Particle MCMC samplers
+
+Additionally you can write your own sampler (although we will not cover this in the course). 
+
+
+```{r}
+gambia_conf$removeSamplers("beta")
+gambia_conf
+```
+
+```{r}
+gambia_conf$addSampler(target = "beta", 
+                       type = "RW_block")
+
+gambia_conf
+
+
+# gambia_conf$addSampler(target = "beta", 
+#                        type = "newSamplerType")
+# where `newSamplerType` or `sampler_newSamplerType` is  
+```
+
+
+We can add a
+```{r}
+gambia_conf <- configureMCMC(gambia_model, 
+                             monitors = "beta", thin = 100, 
+                             monitors2 = "beta0", thin2 = 500, 
+                             useConjugacy = FALSE)
+```
+
+
+
+```{r}
+gambia_conf$addMonitors2("B")
+gambia_conf
+```
+
+## `buildMCMC` and `compileNimble`:
+
+Calling `buildMCMC(conf)` will produce an uncompiled MCMC function object. The uncompiled MCMC can be then be compiled using `compileNimble`, which is the main function for calling the NIMBLE compiler.
+
+
+```{r}
+gambia_build <- buildMCMC(gambia_conf)
+```
+
+A set of compiler calls and output will be seen. Compiling in NIMBLE does 4 things: 1. It generates C++ code files for all the model and nimbleFunction components. 2. It calls the system's C++ compiler. 3. It loads the compiled object(s) into R using dyn.load. And 4. it generates R objects for using the compiled model and nimbleFunctions.
+
+
+```{r}
+gambia_comp <- compileNimble(gambia_model)
+gambia_comp <- compileNimble(gambia_build)
+```
+
+## `runMCMC`
+
+
+```{r, eval = TRUE}
+
+time0 <- Sys.time()
+samples <- runMCMC(gambia_comp, niter = 20000, samples = TRUE,
+                   nburnin = 10000, samplesAsCodaMCMC = TRUE)
+
+time1 <- Sys.time() - time0
+time1 
+```
+
+
+One great feature of using this longer approach rather than the more compact `nimbleMCMC` function is that NIMBLE will store in the compiler the samples you created and, if you see that your MCMC did not reach convergence, you can simply continue the run using the function `run` from the compiler, and setting `reset = FALSE`
+```{r}
+gambia_comp$run(niter = 1000, reset = FALSE)
+```
+
+Sampled values from the first set of monitors will be stored in the object `mvSamples`, while sampled values from the second set of monitors will be stored in `mvSamples2`. Notice that you have to convert them to a matrix to access them.
+```{r}
+dim(as.matrix(gambia_comp$mvSamples2))
+as.matrix(gambia_comp$mvSamples)
+```
+
+<br>
+
+You can use the run function also to run the MCMC directly from the compiled object, however this will allow you to simulate from one chain only
+```{r, eval = FALSE}
+gambia_comp$run(niter = 1000)
+```
+
+```{r, eval = FALSE}
+dim(as.matrix(gambia_comp$mvSamples))
+as.matrix(gambia_comp$mvSamples)
+```
+```{r, eval = FALSE}
+dim(as.matrix(gambia_comp$mvSamples2))
+as.matrix(gambia_comp$mvSamples2)[,2:10]
+```
+
+
+
+
+## User defined function 
+Nimble is flexible enough to allow you to specify functions. 
+
+One very important example are distribution functions. You can write your own distribution if it is not already implemented in Nimble or you can 
+
+```{r}
+
+dbin_vec <- nimbleFunction(
+  run = function(x = double(1), 
+                 pp = double(1),
+                 size = integer(0),
+                 log = logical(0, default = 0)) {
+    returnType(double())
+    result <- sum(dbinom(x, size = size, prob = pp, log = 1))
+    if(log) return(result) else return(exp(result))
+  })
+
+
+
+
+rbin_vec <- nimbleFunction(
+  run = function(n = integer(), 
+                 pp = double(1),
+                 size = integer(0)) {
+    returnType(double(1))
+    result <- rbinom(n, size, pp)
+    return(result)
+  })
+```
+
+We can call the new function from R. Let us check it does what it's supposed to:
+```{r}
+round(prod(dbinom(x = 1:10, p =0.5, size  = 10)), 10) == round(rbin_vec(n = 10, pp = 0.5, size = 10), 10)
+
+sum(dbinom(x = 1:10, p =0.5, size  = 10, log = TRUE)) == dbin_vec(x = 1:10, pp = 0.5, size = 10, log = TRUE)
+```
+
+We can now rewrite the model to incorporate this multivariate distribution: 
+```{r}
+gambiaCode_vec <- nimbleCode({		
+  
+    y[1:N] ~ dbin_vec(p[1:N], 1)
+    logit(p[1:N]) <- beta0 + inprod(beta[], x[1:N,])
+
+    
+    beta0 ~ dnorm(0, sd = 10)
+    B0 <- exp(beta0)
+    
+    for( j in 1:K){
+	    beta[j] ~ dnorm(0, sd = 10)
+      B[j] <- exp(beta[j])
+    }
+
+})
+```
+
+
+
+```{r}
+
+gambia_model_vec <- nimbleModel(code = gambiaCode_vec, 
+                                constants = regConsts,
+                                data = regData, 
+                                inits = regInits)
+
+gambia_comp_vec <- compileNimble(gambia_model_vec)
+
+
+gambia_conf_vec <- configureMCMC(gambia_model_vec, 
+                             monitors = "beta", thin = 100, 
+                             monitors2 = "beta0", thin2 = 500, 
+                             useConjugacy = FALSE)
+
+
+```
+
+
+```{r, eval = TRUE}
+gambia_build_vec <- buildMCMC(gambia_conf_vec)
+gambia_comp_vec <- compileNimble(gambia_build_vec)
+```
+
+
+```{r}
+
+time2 <- Sys.time()
+samples_vec <- runMCMC(gambia_comp_vec, niter = 20000, samples = TRUE, summary = FALSE, 
+                   nburnin = 10000, samplesAsCodaMCMC = TRUE)
+
+time3 <- Sys.time() - time2
+time3
+time1 
+```
+
+
+
+
+
+```{r}
+solveLeastSquares <- nimbleFunction(
+    run = function(X = double(2), y = double(1)) { # type declarations
+        ans <- inverse(t(X) %*% X) %*% (t(X) %*% y)
+        return(ans)
+        returnType(double(2))  # return type declaration
+    } )
+
+X <- matrix(rnorm(400), nrow = 100)
+y <- rnorm(100)
+solveLeastSquares(X, y)
+
+
+CsolveLeastSquares <- compileNimble(solveLeastSquares)
+CsolveLeastSquares(X, y)
+```

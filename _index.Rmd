@@ -23,9 +23,9 @@ output: md_document
   <div class="column">
 \
 \
-  **Statistician -- Expert** \
-  *Statistical Analysis Directorate* \
-
+  *Statistician, Business Survey Unit* \
+  
+Statistical Analysis Directorate \
  DG Economics,
  Statistics and Research \
  **Bank of Italy** \

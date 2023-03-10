@@ -1,0 +1,58 @@
+
+\mode<presentation>
+
+
+% Title page
+\defbeamertemplate*{title page}{tullia}[1][]
+{ 
+
+
+\begin{tikzpicture}[remember picture,overlay] % Background box
+\node [xshift=\paperwidth/2,yshift=\paperheight/2] at (current page.south west)[rectangle,fill,inner sep=0pt,minimum width=\paperwidth,minimum height=3*\paperheight/5,top color=light,bottom color=light]{}; % Change the height of the box, its colors and position on the page here
+\end{tikzpicture}
+
+
+
+\color{white}\sffamily
+
+\hfill \huge{Wasserstein Consensus \\ \hfill for Bayesian Sample Size Determination}
+\vspace{0.6cm}
+
+
+\begin{columns}
+
+\begin{column}{0.45\textwidth}
+\vspace{1.55cm}
+
+\includegraphics[width=.7\textwidth]{sapienza-logo-png-6.png}
+
+{\small Dipartimento di Scienze Statistiche}
+
+\end{column}
+
+\begin{column}{0.45\textwidth}
+
+\hfill \Large{Tullia Padellini}
+
+\vspace{0.25cm}
+
+
+\hfill \scriptsize{tulliapadellini.github.io     \faLaptop} 
+
+\hfill \scriptsize{tullia.padellini@uniroma1.it   \faEnvelope}
+
+\vspace{0.5cm}
+\vspace{0.3cm}
+
+\small{\hfill \faUserPlus \; Michele Cianfriglia \\ \hfill Pierpaolo Brutti } 
+
+
+
+\vspace{0.7cm}
+\vfill
+\hfill Napoli -- 9 July 2019 
+\end{column}
+
+}
+\mode
+<all>

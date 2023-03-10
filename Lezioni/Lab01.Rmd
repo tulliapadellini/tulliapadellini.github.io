@@ -1,0 +1,682 @@
+---
+title: "R - 101"
+date: "13 Oct 2016"
+output: html_document
+---
+
+# Introduzione a R
+
+Queste note costituiscono un'introduzione ad R, un linguaggio di programmazione rivolto all'analisi dei dati, utilizzato in statistica e data mining. Perchè proprio R?
+
+* È __gratuito__: contrariamente ad altri software comunemente utilizzati in ambito economico-statistico (ad esempio SAS, STATA etc), R ? _open-source_.
+* È __aggiornato__: quando viene presentata una nuova metodologia di analisi dei dati, molto spesso la prima implementazione ? proprio in R.
+* È [__redditizio__](http://www.business2community.com/tech-gadgets/15-highest-paying-programming-languages-2016-01559832#D4LV23bxI8FxJgAM.97)...
+
+Informazioni introduttive possono essere trovate su [wikipedia](http://it.wikipedia.org/wiki/R_%28software%29) e [r-project.org/about.html](http://www.r-project.org/about.html).
+
+Un comando in R è un'istruzione del tipo:
+```{r eval=FALSE}
+print("hello, world")
+```
+che ha come risultato:
+```{r echo=FALSE}
+print("hello, world")
+```
+
+
+## Installazione di R
+
+Sul sito [https://cran.r-project.org](https://cran.r-project.org) è possibile trovare i files da scaricare per l'installazione di R, oltre ad alcuni (forse anche troppo) dettagliati [manuali](https://cran.r-project.org/manuals.html).
+
+### Windows
+
+#### Long Version
+
+Visitare il sito [www.r-project.org](http://www.r-project.org/) e cliccare sul link [CRAN](http://cran.r-project.org/mirrors.html) che si trova sul menu a sinistra (sotto la voce "Download, Packages"). Da quest'ultima pagina è possibile selezionare un _mirror_ da cui scaricare R. Sotto la voce _Italy_ è possibile selezionare uno dei 4 _mirror_. Supponendo di aver scelto Milano, dovremmo trovarci alla pagina [http://cran.mirror.garr.it/mirrors/CRAN/](http://cran.mirror.garr.it/mirrors/CRAN/). Da qui, cliccare sul primo link: [Download R  for Windows](http://cran.mirror.garr.it/mirrors/CRAN/bin/windows/) e cliccare su [base](http://cran.mirror.garr.it/mirrors/CRAN/bin/windows/base/) e quindi su [Download R 3.3.1 for Windows](http://cran.mirror.garr.it/mirrors/CRAN/bin/windows/base/R-3.3.1-win.exe). Dopo aver eseguito il file, R dovrebbe trovarsi in una cartella del tipo C:\\Programmi\\R\\R-3.3.1\\ (il percorso esatto dipende da dove si è scelto di installare il programma e dalla versione di R). Per avviarlo, cliccare su C:\\Programmi\\R\\R-3.3.1\\bin\\R.exe. Normalmente, durante l'installazione vengono messi un collegamento nel menu **Start** di Windows e/o un'icona sul desktop.
+
+#### Short Version
+
+Scaricare da [questo link](link http://cran.mirror.garr.it/mirrors/CRAN/bin/windows/base/R-3.3.1-win.exe) l'installer di R, eseguirlo ed avviare R dal collegamento sul desktop e/o dal menu **Start**.
+
+### Linux/BSD
+
+[L'installazione di R su Linux](https://cran.r-project.org/bin/linux/) dipende dalla distribuzione utilizzata:
+
+* [Ubuntu](https://cran.r-project.org/bin/linux/ubuntu/)
+* [Debian](https://cran.r-project.org/bin/linux/debian/)
+* [RedHat](https://cran.r-project.org/bin/linux/redhat/)
+
+
+### Mac
+Per installare R su un mac con sistema operativo successivo a _Snowleopard_ è sufficiente eseguire il file scaricabile a [questo link](https://cran.r-project.org/bin/macosx/R-3.3.1.pkg). Per versioni anteriori di OS X, informazioni aggiuntive e files da scaricare possono essere trovati [qui](https://cran.r-project.org/bin/macosx/).
+
+Per poter usufruire di tutte le funzionalita di R è necessario scaricare anche [XQuartz](http://xquartz.macosforge.org/) che da OS X 10.9 (Mavericks) non è più parte del sistema operativo. Per l'utilizzo di R che faremo in questo laboratorio tuttavia questo non è richiesto. 
+
+##Installazione RStudio
+
+L'interfaccia di R non è esattamente *user-friendly*, è perciò consigliabile utilizzare un [IDE](https://it.wikipedia.org/wiki/Integrated_development_environment) più intuitivo, come ad esempio RStudio. 
+RStudio è solo un'interfaccia alternativa, è necessario installare R prima per poterlo usare. 
+Informazioni aggiuntive su RStudio possono essere trovate su [https://www.rstudio.com/](https://www.rstudio.com/). Per installare RStudio è sufficiente andare su [questa pagina](https://www.rstudio.com/products/rstudio/download3/), scaricare la versione relativa al proprio sistema operativo (in particolare [questa per Windows](https://download1.rstudio.org/RStudio-0.99.903.exe), [questa per Mac](https://download1.rstudio.org/RStudio-0.99.903.dmg),e [questa per Linux](https://download1.rstudio.org/rstudio-0.99.903-i386.deb) ), eseguire il file così scaricato e seguire la procedura guidata di installazione. 
+
+
+## Creare un progetto in RStudio
+
+Una delle funzioni più utili in RStudio è la creazione di progetti; questi permettono di raggruppare script, dati, history e workspaces (queste parole saranno più chiare alla fine della lezione!) in un'unica cartella. Per aprire un progetto basta andare su: 
+
+**File > New project >...**
+
+A questo punto vi viene chiesto se volete crearlo su una cartella (o _directory_) già esistente o su una nuova. Potete scegliere una directory già esistente selezionandola tramite il pulsante **Browse..** e infine cliccate su **Create project**.  A quel punto RStudio si posizionerà subito all'interno del nuovo progetto appena creato. Andando su:
+
+**Tools > Project Options >...**
+
+potete modificare le impostazioni del vostro specifico progetto. Qualora esse siano fissate su Default si avrà come conseguenza che si comporteranno come le impostazioni globali (**Tools > Global Options >...**) di RStudio.
+Per uscire dal progetto basta andare su:
+
+**File > Close project**
+
+
+# R basics 
+
+## Apertura, calcoli e chiusura
+
+Alla sua apertura, RStudio si presenta diviso in quattro sezioni:
+
+<figure>
+  <img src="/./post_ita/RStudio01.tiff" alt="" width="700">
+</figure>
+
+
+1. __Script__: lo script è un file di testo in cui scrivere i comandi che vogliamo far eseguire ad R.
+
+2. Possiamo distinguere due sottofinestre: 
+
+* __Environment__: mostra tutti gli oggetti presenti nello spazio di lavoro (anche detto _workspace_)
+* __History__: contiene l'elenco di tutti i comandi eseguiti dalla console.
+
+3. __Console__: qui vengono eseguiti i comandi di R e vengono mostrati i risultati. Nella console troverete il "prompt" presente sulla console e  indicato (di default) da "> " che è il segnale di inizio per poter scrivere le istruzioni.
+
+4. Possiamo distinguere 5 sottofinestre:
+* __Files__: qui troverete tutti i file della working directory, cioè della cartella dove state lavorando, questi file sono gi stessi che trovereste nella cartella visualizzandola con esplora risorse 
+* __Plots__ è la finestra dove visualizzerete tutti i grafici
+* __Packages__: questa finestra vi mostra tutti i "pacchetti" installati e vi permette di installarne altri
+* __Help__: la finestra "amica", in essa infatti visualizzerete un aiuto (in inglese) per le istruzioni che userete
+* __Viewer__: una finestra per funzioni avanzate che non utilizzeremo in questo corso.
+
+
+
+Il motivo per cui utilizziamo R o un qualunque software statistico è delegare a lui calcoli che non sappiamo (o vogliamo) eseguire noi. Iniziamo a vedere cosa significa che R "esegue calcoli" partendo dal caso più semplice possibile, ossia le operazioni arimetiche:
+
+```{r}
+2+2
+3*4
+5*7-2
+```
+
+Esistono anche funzioni di R per operazioni più complesse come radice quadrata o logaritmo, ad esempio: 
+```{r}
+sqrt(16)
+log(1)
+``` 
+
+_sqrt()_ e _log()_ sono due funzioni. In R, le funzioni sono scritte come **nome(argomento)** dove _nome_ è il nome della funzione e _argomento_ (racchiuso tra parentesi tonde) è il valore in cui viene calcolata. Ad esempio, in **sqrt(16)** la funzione è _sqrt()_ e l'argomento è _16_, mentre in **log(1)** la funzione è _log()_ e l'argomento _1_.
+
+Per capire come usare una funzione possiamo servirci dei comandi **help()** e **help.search()** che servono ad aprire la documentazione di supporto. Usiamo la funzione **help()** quando conosciamo il nome di una funzione ma non sappiamo come lavori o cosa faccia di preciso, ad esempio **help(sqrt)** ci fornisce informazioni su come usare **sqrt**. Usiamo la funzione **help.searc()** quando sappiamo *cosa* vogliamo ottenere ma non *come*. Ad esempio supponiamo di voler calcolare il logaritmo di un numero ma di non conoscere la funzione **log()**, la funzione **help.searc("logarithm")** ci permette di trovare la funzione che ci serve. Osserviamo che quando utilizziamo **help.search()**, l'argomento della nostra ricerca deve essere indicato tra virgolette. 
+
+```{r}
+help(sqrt)
+??sqrt
+
+help.search("logarithm")
+```
+
+
+Il risultato di un'operazione può essere salvato in R in modo tale da essere richiamato senza dover rieseguire tutti i calcoli. R permette infatti di assegnare l'output di un'operazione ad un oggetto, come illustrato di seguito:
+
+```{r}
+x = 2+2
+x
+```
+
+L'operazione appena effettuata viene chiamata assegnazione. Diciamo che il valore 2+2 è stato assegnato alla variabile x. Da questo momento in poi possiamo richiamare la variabile x se vogliamo evitare di ricalcolare 2+2. In questo esempio può sembrare quasi superfluo, ma le cose cambiano se cominciate a considerare quantità come 
+```{r, eval=FALSE}
+(log(10)*2+sqrt(5))/4*cos(2*pi/3 + 1)
+```
+
+In R ci sono più modi per effettuare un'assegnazione, in particolare i seguenti comandi sono equivalenti:
+```{r}
+x = 10
+assign ("x", 10)
+x <- 10
+10 -> x
+```
+
+Osserviamo che una volta creata tramite assegnazione, la variabile _x_ è presente nel *Global Environment*, ed appare nel riquadro in alto a destra.
+
+__NB:__ R è case sensitive, quindi fa distinzione tra x e X. R non considera invece lo spazio, quindi i comandi:
+```{r}
+x=10 
+x = 10
+x    =    10
+```
+sono per lui equivalenti. L'utilizzo di spazi può aiutare a rendere il codice più intellegibile; [qui](http://adv-r.had.co.nz/Style.html) è possibile trovare alcune linee guida per scrivere codice comprensibile. 
+
+
+Esistono tre principali tipi di variabili: 
+
+1. numerico (_numeric_) 
+2. testuale (_character_) 
+3. logico (_logical_)
+
+```{r}
+var1 = 5
+mode(var1) 
+```
+La funzione mode ci permette di stabilire il tipo di una variabile. Ricordatevi che per sapere cosa fa una funzione si può usare il comando di help:
+```{r}
+?mode
+help(mode)
+```
+
+Esempi di variabili _character_ e _logical_ sono invece:
+```{r}
+var2 = "testo"
+mode(var2)
+var3 = TRUE
+mode(var3)
+```
+
+Le variabili _logical_ possono assumere tre valori _TRUE_, _FALSE_ e _NA_.  
+
+__NB:__ _FALSE_ è logico mentre _"FALSE"_ è testuale
+
+
+
+
+## Vettori
+#### Definizione di vettore
+I vettori sono collezioni di elementi. Per creare un vettore usiamo la funzione c(): 
+```{r}
+vect1 = c(1,2,3)
+vect1
+```
+Un vettore è dunque costruito "concatenando" diversi elementi (c sta infatti per _concatenate_).
+
+```{r}
+vect2 = c("a", "b", "c", "d")
+vect2
+vect3 = c(TRUE, TRUE, FALSE)
+vect3
+```
+
+Anche i vettori hanno dei tipi, in particolare è immediato vedere che:
+
+* se tutti gli elementi sono numeric, il vettore è numeric:
+```{r}
+mode(vect1) 
+```
+* se tutti gli elementi sono character il vettore è character:
+```{r}
+mode(vect2)
+```
+* se tutti gli elementi sono logical il vettore è logical:
+```{r}
+mode(vect3)
+```
+
+E se gli elementi fossero di tipi diversi? Un vettore è una collezione _omogenea_, ossia R assume che tutti i suoi elementi siano dello stesso tipo, anche se questo non è vero:
+
+```{r}
+vect4 = c(1,"stringa", 4, FALSE)
+vect4
+mode(vect4)
+```
+
+Altri comandi per costruire vettori sono:
+```{r}
+vect5 = 1:10 # crea una sequenza da 1 a 10
+vect5
+vect6 = seq(from=1, to=10, by=0.5)  # crea una sequenza da 1 a 10 con passo 0.5
+vect6
+```
+
+è possibile creare un vettore concatenando due o più vettori, ad esempio:
+```{r}
+vect7 = c(vect2, vect4)
+vect7
+```
+
+----------------------- ------------------------------------------
+__Piccola Prova__\      Costruire un vettore con il comando rep e
+                        commentare il tipo di oggetto  ottenuto. 
+                        Usate i comandi ? o help() per capire come 
+                        funziona la funzione rep  
+                        
+------------------------------------------------------------------
+
+
+
+#### Funzioni per vettori
+L'operatore che permette di selezionare un elemento all'interno di una collezione _A_ di elementi è la parentesi quadra. Il comando *A[ pos ]* estrae da _A_ l'elemento di posizione _pos_. Ad esempio, nel caso del vettore _vect7_ che ricordiamo essere
+```{r, echo=FALSE}
+vect7
+```
+il comando 
+```{r}
+vect7[2]
+```
+permette di selezionare il secondo elemento del vettore _vect7_.
+
+Osserviamo che è possibile selezionare più di un elemento alla volta, ad esempio:
+```{r}
+vect7[4:7] 
+```
+seleziona quarto, quinto, sesto e settimo elemento, mentre
+```{r}
+vect7[c(1,7)]
+```
+seleziona primo e settimo elemento.
+
+Possiamo usare anche condizioni logiche per selezionare elementi in un vettore, ad esempio:
+```{r}
+vect6[vect6>4]
+```
+
+Funzioni utili per vettori sono:
+
+* _lenght()_: conta il numero di elementi nel vettore
+```{r}
+length(vect7)     
+```
+* _sum()_: somma gli elementi di un vettore (__NB:__ vale solo per vettori numerici)
+```{r}
+sum(vect6)  
+```
+* _prod()_: moltiplica gli elementi di un vettore (__NB:__ vale solo per vettori numerici)
+```{r}
+prod(vect6)       
+```
+* prodotto di un vettore per uno scalare
+```{r}
+4*vect6           
+```
+* somma di due vettori ( __NB:__ vale solo per vettori numerici)
+```{r}
+c(1,1,1) + c(2,3,4)
+```
+
+R permette di sommare anche vettori di lunghezza diversa: 
+```{r}
+vect5 + vect6
+```
+ma è importante però notare che R produce un _warning_ quando proviamo a farlo. Un _warning_ vuol dire che R ha effettuato l'operazione ma in modo "creativo". Più precisamente, per sommare i due vettori, R ha effettuato un _riciclaggio_, ossia ha riutilizzare gli elementi dell'oggetto la cui dimensione è inferiore in modo che la dimensione di tutti gli oggetti coinvolti sia la stessa. 
+
+#### Un po' di statistica
+Vediamo adesso alcune delle funzioni base dell'analisi statistica. Supponiamo di aver osservato un campione: `r campione = c(72.6, 40.1, 59.6, 92.3, 65.4, 27.1, 86.4, 28.6, 5.4, 82.0)`. 
+Funzioni utili:
+
+* _min()_: calcola il valore minimo
+```{r}
+min(campione)
+```
+* _max()_: calcola il valore massimo
+```{r}
+max(campione)
+```
+* _mean()_: calcola la media
+```{r}
+mean(campione)
+```
+* _median()_: calcola la mediana
+```{r}
+median(campione)  
+```
+* _range()_: restituisce un vettore di due elementi, il min e max
+```{r}
+range(campione)
+```
+* _sd()_: calcola la deviazione standard
+```{r}
+sd(campione)
+```
+* _var()_: calcola la varianza (corretta)
+```{r}
+var(campione)
+```
+
+----------------------- --------------------------------------------
+Piccola Prova\          Calcolare a mano utilizzando le funzioni sum
+                        e length la media, la varianza e la varianza  
+                        corretta del campione.
+                        
+--------------------------------------------------------------------
+
+
+## Matrici
+
+Una matrice _n \times k_ è una collezione di elementi composta da _n_ righe e _k_ colonne; intuitivamente può essere interpretato come _n_ vettori di lunghezza _k_ messi per riga o _k_ vettori di lunghezza _n_ affiancati per colonna. In R possiamo definire una matrice in diversi modi:
+
+1. direttamente attraverso il comando _matrix_
+```{r}
+mat1 = matrix(data=c(1:12), nrow=4, ncol=3, byrow =FALSE) 
+mat1
+```
+dove _nrow_ e _ncol_ rappresentano il numero di righe e colonne rispettivamente
+_mat1_.
+
+2. concatenando righe con il comando _rbind_
+```{r}
+mat2 = rbind(vect1, 5:7) 
+mat2
+```
+
+3. concatenando colonne con il comando _cbind_
+```{r}
+mat3 = cbind(vect1, 5:7)
+mat3
+```
+
+
+Per determinare le dimensioni di una matrice usiamo il comando _dim()_:
+```{r}
+dim(mat1)
+dim(mat2)
+dim(mat3)
+```
+
+Per selezionare un particolare elemento di una matrice usiamo ancora le parentesi quadre _[ ]_, ma, mentre nel caso di un vettore c'era un solo indice di posizione (il _posto_ dell'elemento nel vettore), nella matrice ce ne sono due, un indice di riga e uno di colonna. Per selezionare il generico elemento di riga _i_ e colonna _j_ dobbiamo specificare entrambi, separati da una virgola, ossia _[riga, colonna]_. Ad esempio
+```{r}
+mat1[1,2]
+```
+seleziona l'elemento all'incrocio tra la prima riga e la seconda colonna.
+
+Se specifichiamo l'indice di riga ma non quello di colonna, ad esempio 
+```{r, eval=FALSE}
+mat1[1,]
+```
+R restituisce l'intera prima riga (che non ò altro che l'intersezione della prima riga con _tutte_ le colonne). Analogamente, se specifichiamo solo l'indice di colonna, ad esempio 2, R ci restituirà l'intera seconda colonna
+```{r}
+mat1[1,]
+mat1[,2]
+```
+
+__NB__: Anche se uno dei due indici è lasciato vuoto, le due posizioni devono sempre essere separate dalla virgola. 
+
+
+Operazioni utili per le matrici sono:
+
+* Trasposizione
+```{r}
+t(mat1)        
+```
+* Somma tra matrici (__NB__: contrariamente al caso dei vettori, non è possibile sommare matrici di dimensioni diverse)
+```{r}
+mat1+mat1       
+```
+* Moltiplicazione di una matrice per uno scalare
+```{r}
+4*mat1
+```
+* Determinante ()
+```{r, eval=FALSE}
+det(mat1)       
+```
+* Calcolo dell'inversa
+```{r, eval=FALSE}
+solve(mat1)       
+```
+
+__NB__: Le ultime due operazioni producono un _Error_, questo vuol dire che R non ha eseguito l'istruzione che gli abbiamo fornito e ci informa di quale sia il motivo (in questo caso il problema è che non si possono calcolare determinante o inversa di una matrice non quadrata)
+```{r}
+newmat = matrix(c(2,3,5.3,2,4,6,7,3,2), nrow=3, ncol=3)
+newmat
+solve(newmat)
+det(newmat)
+```
+
+Analogamente a quanto abbiamo visto per i vettori, anche le matrici sono collezioni omogenee, ossia R considera tutti gli elementi di una matrice dello stesso tipo.
+```{r}
+riga1 = c(0,2,4)
+riga2 = c(6,5,"a")
+mat4 = rbind(riga1, riga2)
+mat4
+
+mode(mat4)
+```
+
+
+
+## Dataframes
+
+# Dataframes --------------------------------------------------------------
+
+I dataframes sono generalizzazioni delle matrici che permettono di considerare elementi di natura diversa.In sostanza un dataframe è una matrice in cui ogni colonna rappresenta una diversa variabile e come tale può avere tipo diverso. 
+
+Per capire meglio questo concetto, analizziamo la costruzione di un dataframe:
+```{r}
+nome      = c("Marco", "Giulio", "Livia", "Gaia", "Carlo")
+altezza   = c(1.82, 1.77, 1.70, NA, 1.94)
+fuorisede = c(TRUE, FALSE, FALSE, FALSE, TRUE)
+fratelli  = c(0, 0, 2, 1, 0)
+
+df = data.frame(nome, altezza, fuorisede, fratelli)
+df
+```
+Il dataframe _df_ contiene tutte le informazioni sul campione considerato; le sue righe rappresentano le unità campionarie (i vari intervistati), mentre le colonne rappresentano le variabili di interesse. È facile capire che il dataframe è l'oggetto principe nelle analisi statistiche con R. 
+Il dataframe _df_ è stato creato combinando oggetti di tipo diverso (_nome_ è character, _altezza_ è numeric, _fuorisede_ è logical etc), che rimangono di tipo diverso. Per studiare la struttura di un dataframe usiamo il comando str()
+```{r}
+str(df)
+```
+La prima cosa che ci dice è che l'oggetto df è un dataframe. In particolare questo dataframe è composto da 5 osservazioni di 4 variabili (_nome_,_altezza_,_fuorisede_ e _fratelli_) che vediamo precedute da un segno di dollaro, $. 
+
+Il dollaro viene utilizzato per estrarre una variabile da un dataframe, ad esempio se vogliamo solo l'altezza:
+```{r}
+df$altezza
+```
+
+Ci sono altri modi per estrarre la stesse variabile dal dataframe, in particolare:
+```{r}
+df[,2]    # tutte le righe della seconda colonna, quella dell'altezza
+df[2]     # se è specificato un solo valore tra parentesi quadre nel caso dei dataframe è la colonna
+df["altezza"]
+```
+
+Naturalmente possiamo voler estrarre anche le righe (o unità) del dataframe:
+```{r}
+df[1,] # estrae la prima riga
+df[c(1,3),] # estrae la prima e la terza
+df[c(TRUE, TRUE, FALSE, FALSE, FALSE),] # estrae la prima e la seconda
+```
+
+Grazie ai dataframes è facile selezionare sottocampioni che soddisfino una data proprietà. Supponiamo ad esempio di voler studiare solo la sottopopolazione degli "alti" ossia tutti gli individui del campione di altezza superiore a 1.80, ossia tutti quelli per cui è vera la seguente condizione logica
+```{r}
+df["altezza"]>1.80
+```
+
+Il comando _df["altezza"]>1.80_ ci restituisce un vettore di _TRUE_, _FALSE_ che possiamo utilizzare per estrarre solo alcune righe da _df_
+```{r}
+
+df[df["altezza"]>1.80,]
+```
+
+Se invece fossimo interessati alla sottopopolazione dei figli unici, ossia tutti gli individui per cui è valida la condizione logica fratelli == 0 è sufficiente considerare
+```{r}
+df[ df$fratelli == 0,]
+```
+
+
+
+Osserviamo che per un dataframe valgono tutte le operazioni definite per una matrice.
+```{r}
+df[1,2]
+dim(df)
+df+df
+```
+
+Altre informazioni su di un dataframe:
+```{r}
+summary(df)
+```
+
+
+### Liste
+
+Le liste sono una generalizzazione dei vettori al caso di elementi complessi. In sostanza una lista è un vettore dove ciascun elemento può essere un qualunque oggetto, ad esempio una matice, un vettore o anche un dataframe. 
+
+Una lista può essere creata con il comando list():
+```{r}
+lista1 = list(a=mat1, b=df, c=vect1, d=var3)
+```
+
+Per una lista valgono molti dei comandi già visti per dataframes, in particolare:
+
+* str() ci permette di studiarne la struttura:
+```{r}
+str(lista1)
+```
+
+* $variabile ci permette di estrarre un elemento:
+```{r}
+lista1$a
+```
+
+
+
+## Importare Dati 
+
+In R i dati esterni vengono caricati in due modi: 
+
+1. (versione facile) utilizzando il comando "import dataset" nel pannello environment in alto a destra.
+
+2. (versione difficile) utilizzando la funzione read.table() o read.csv(). 
+
+Queste due funzioni sono assolutamente equivalenti (quindi useremo sempre la prima).
+
+Proviamo ora ad importare il file Mc_data.csv, per rendere l'operazione più semplice, è comodo spostare il file che vogliamo caricare nella cartella dove stiamo lavorando (ossia quella del progetto).
+```{r}
+mc_data = read.csv("Mc_data.csv")
+```
+Per capire che in che tipo di oggetto sono stati importati in R i dati possiamo: 
+
+* andare per tentativi, utilizzando la funzione is. 
+
+```{r}
+is.vector(mc_data)
+is.matrix(mc_data)
+is.data.frame(mc_data)
+is.list(mc_data)
+```
+
+* utilizzare la funzione class:
+
+```{r}
+class(mc_data)
+```
+
+*mc_data* è un dataframe, sappiamo dunque che informazioni utili possono essere estratte con:
+```{r}
+str(mc_data)
+summary(mc_data)
+```
+
+Selezioniamo solo i prodotti relativi alla colazione:
+```{r}
+mc_breakfast = mc_data[mc_data$Type=="Breakfast",]
+```
+Questo è ancora una volta un dataframe
+```{r}
+str(mc_breakfast)
+summary(mc_breakfast)
+```
+Possiamo esportare questa selezione come file csv: 
+```{r}
+write.csv(mc_breakfast, file = "mc_breakfast.csv")
+```
+Questo comando ha creato un file "mc_breakfast.csv" nella working directory. Osserviamo che questo è un file in formato .csv, per salvare gli stessi dati in un file .txt si può usare il comando write.table.
+
+## Salva e Chiudi
+Prima di chiudere vogliamo salvare gli oggetti definiti nel laboratorio di oggi (o in generale in una sessione di R).
+Per sapere quali oggetti sono presenti nell'environment possiamo guardare il pannello in alto a dx o usare il comando ls():
+```{r}
+ls()
+```
+
+Per sapere dove stiamo salvando, bisogna capire in che directory stiamo lavorando, questo può essere fatto con il comando getwd():
+```{r}
+getwd()
+```
+In questo caso il comando ci restituisce la cartella che abbiamo scelto quando abbiamo creato il progetto, possiamo però decidere di lavorare in un altra directory, per farlo usiamo il comando setwd():
+```{r, eval=FALSE}
+setwd('/Users/tulliapadellini/Dropbox (Personal)/ESERCITAZIONI ROMA III/LAB01')
+```
+
+Per salvare gli oggetti presenti nell'environment globale, il workspace, possiamo usare il comando save.image("nome_del_file.RData"). 
+```{r, eval=FALSE}
+save.image("workspace_lab01.RData")
+```
+
+Volendo possiamo anche non salvare tutti gli oggetti, ad esempio se vogliamo salvare solo vect1 e mat1 usiamo il comando:
+```{r}
+save(vect1, mat1, file='oggetti.RData')
+```
+In sostanza save.image() corrisponde a save(list=ls()).
+
+Al contrario per eliminare un elemento dal workspace usiamo il comando rm()
+```{r}
+rm(mat1)
+```
+Verifichiamo con ls() che l'oggetto mat1 non è più presente nel workspace:
+```{r}
+ls()
+```
+Se vogliamo rimuovere tutti oggetti dal workspace usiamo:
+```{r}
+rm(list=ls()) # USARE CON CAUTELA
+ls()
+```
+Oltre allo script e al workspace possiamo salvare l'elenco dei comandi eseguiti, la "history" della sessione.
+```{r, eval=FALSE}
+savehistory("history_lab01.Rhistory")
+```
+Come abbiamo visto prima, la history si può trovare anche nel pannello in alto a destra della finestra di R Studio.
+Per caricare history e workspace usiamo load():
+```{r, eval=FALSE}
+load("workspace_lab01.RData")
+loadhistory("history_lab01.Rhistory")
+```
+
+
+## Opzionale - Funzioni ----------------------------------------------------
+
+Per quanto R abbia moltissime funzioni già "pronte per l'uso" (abbiamo visto log, mean, sd, etc), non sempre è possibile trovarne una che risponda alle nostre esigenze; è utile dunque essere in grado di costruire a mano delle funzioni. 
+
+In R una funzione si costruisce con il comando function(). Una generica funzione si definisce come segue:
+```{r, eval=FALSE}
+nome_della_funzione = function( argomento della funzione ) espressione della funzione
+```
+
+Iniziamo con un esempio molto semplice, la funzione quadrato:
+```{r}
+quadrato = function(x) x^2
+```
+In questo caso x è l'argomento della funzione, mentre quadrato è il suo nome. L'espressione della funzione è l'argomento elevato al quadrato (^2).
+
+Se vogliamo determinare il quadrato di 5, è sufficiente richiamare la funzione specificandone l'argomento:
+```{r}
+quadrato(5)
+```
+Naturalmente si ha anche che:
+```{r}
+quadrato(3)
+```
+et cetera.
+
+Consideriamo ora una funzione di due elementi, x e a :
+```{r}
+potenza = function(x,a) x^a
+```
+In questo caso la funzione consiste nel prendere il primo argomento ed elevarlo ad una potenza pari al secondo:
+```{r}
+potenza(2, 2)
+potenza(3, 2)
+potenza(3, 3)
+```

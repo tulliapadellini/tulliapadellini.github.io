@@ -1,0 +1,639 @@
+---
+title: "INLA"
+author: "Tullia Padellini"
+output:
+  beamer_presentation:
+    keep_tex: yes
+  ioslides_presentation: default
+header-includes:
+- \usetheme{Pittsburgh}
+- \usecolortheme{seagull}
+- \usepackage{graphicx}
+- \usepackage{amsmath}
+- \usepackage{amsthm}
+- \usepackage{setspace}
+- \usepackage{bm}
+- \usepackage{bbm}
+- \usepackage{pgf}
+- \usepackage{caption}
+- \usepackage{subcaption}
+- \usepackage{booktabs}
+- \usepackage{tabularx}
+- \usepackage{amssymb}
+- \usepackage{hyperref}
+- \usepackage{algorithm2e}
+- \usepackage{mathtools}
+- \usepackage{multirow}
+- \usepackage{animate}
+- \def\labelitemi{\ast}
+- \definecolor{gray}{RGB}{120,80,10}
+- \definecolor{red}{RGB}{20,80,100}
+- \definecolor{light}{RGB}{20,80,100}
+- \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+- \setbeamercolor{frametitle}{fg=black}
+- \setbeamercolor{framesubtitle}{fg=light!80}
+- \setbeamercolor{structure}{fg=light}
+- \setbeamertemplate{itemize subitem}{}
+- \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+- \usepackage{blindtext}
+- \usepackage{tikz}
+- \usepackage{fontawesome}
+
+fontsize: 9pt
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+\begin{tikzpicture}[remember picture,overlay] % Background box
+\node [xshift=\paperwidth/2,yshift=\paperheight/2] at (current page.south west)[rectangle,fill,inner sep=0pt,minimum width=\paperwidth,minimum height=3*\paperheight/5,top color=light,bottom color=light]{}; % Change the height of the box, its colors and position on the page here
+\end{tikzpicture}
+
+
+
+\color{white}\sffamily
+
+\hfill \huge{INLA\\ \hfill \Large{as much as you can learn in 90 minutes}}
+\vspace{0.6cm}
+
+
+\begin{columns}
+
+\begin{column}{0.45\textwidth}
+\vspace{1.55cm}
+
+\includegraphics[width=.7\textwidth]{sapienza-logo-png-6.png}
+
+{\small Dipartimento di Scienze Statistiche}
+
+\end{column}
+
+\begin{column}{0.45\textwidth}
+
+\hfill \Large{Tullia Padellini}
+
+\vspace{0.25cm}
+
+
+\hfill \scriptsize{tulliapadellini.github.io     \faLaptop} 
+
+\hfill \scriptsize{tullia.padellini@uniroma1.it   \faEnvelope}
+
+\vspace{0.5cm}
+\vspace{0.3cm}
+
+
+
+
+\vspace{0.7cm}
+\vfill
+\hfill Roma -- 11 December 2019 
+\end{column}
+
+\end{columns}
+
+
+
+
+
+\clearpage
+
+## INLA
+\framesubtitle{what are we doing here today}
+
+
+
+Efficient (i.e. *fast*) and accurate computational tool for Bayesian Statistics.
+
+\vspace{.7cm}
+
+* INLA - the method
+    * a **deterministic** algorithm to approximate the posterior distribution
+
+\vspace{0.5cm}
+
+* `R-INLA` - the implementation
+    * an `R` package to perform fit a large class of models in a Bayesian way
+
+
+## INLA -`I`ntegrated `N`ested `L`aplace `A`proximation
+\framesubtitle{you can have the cake and eat it too}
+
+
+- **it's fast**
+    - relies on numerical approximation and sparse matrices
+    
+\vspace{0.25cm}
+
+    
+- **it's accurate**
+    - empirically shows better performances than MCMC
+        
+\vspace{0.25cm}
+
+
+- **it's flexible**
+    - can be used to fit any model formulated as a GAN
+        
+\vspace{0.25cm}
+
+  
+- **it is** (relatively) **easy to use**
+    - it's implemented as an `R` package 
+
+
+## Motivation
+\framesubtitle{isn't MCMC good enough?}
+
+Do we actually need **yet another way** to implement Bayesian Methods?
+
+\vspace{0.25cm}
+
+Yes if we think that MCMC methods are
+
+- cumbersome to write
+- slow 
+
+\vspace{0.25cm}
+
+And this is very much true when dealing with Spatial Models
+
+
+
+
+## INLA vs MCMC take I 
+\framesubtitle{MCMC are cumbersome to write}
+
+\includegraphics[width=.7\textwidth]{write.png}
+
+
+## INLA vs MCMC take II
+\framesubtitle{MCMC are slow}
+
+
+\includegraphics[width=.9\textwidth]{run.png}
+
+
+# INLA
+
+## INLA models
+\framesubtitle{basically most of the models you have already seen}
+
+\begin{align*}
+	y|\theta, \psi &\sim  \pi(y; \theta, \psi) & & \text{Likelihood}\\
+	\theta | \psi &\sim  \only<1>{\pi(\theta;\psi)}\only<2-3>{N(\theta; 0, \Sigma(\psi) )} & & \text{Latent structure }\\
+	\psi &\sim \pi(\psi) & & \text{Hyperprior}\\
+\end{align*}
+
+`INLA` provides **numerical** approximations of the marginal posteriors
+$$\pi(\theta_i| y) \qquad \qquad	\pi(\psi_j | y)$$
+
+\pause
+\pause
+
+Linear models naturally fall in the `INLA` framework when we consider $\theta = (\beta, f_1, f_2, \dots)$
+$$y= k(\eta) + \epsilon  \qquad \quad \eta = x^t\beta + \sum_k f_k(z_k)$$
+where $\sum_k f_k(z_k)$ can represent random effects, splines, anything you like.
+
+
+
+<!-- ## Why does MCMC still exists  -->
+
+
+<!-- Let us $y$ be our observed variables and $\theta$ be the parameter of interest.  -->
+
+<!-- * Likelihood: $y|\theta, \psi_2 \sim \Pi_{i} f(y_i; \theta_i, \psi_2)$ -->
+
+<!-- * Prior: $\theta|\psi_1 \sim \pi(\theta|\psi_1) \only<2>{ = N(x; 0, \Sigma)}$ -->
+
+<!-- * Hyperprior: $\psi = (\psi_1, \psi_2) \sim \pi(\psi)$ -->
+
+<!-- you may ask yourself that, but in order to answer we need to see what are the basic assumptions INLA is  -->
+
+<!-- \pause -->
+
+
+## Laplace Approximation
+\framesubtitle{the basic intuition}
+
+Laplace approximation is based on the following two key idea:
+
+\begin{align*}
+f(x) & = \exp[\log(f(x))] \\
+g(x) & = g(x^*) + g''(x^*)(x-x^*)^2 + \text{error} \approx g''(x^*)(x-x^*)^2
+\end{align*}
+
+So that for every density $f$ we have \[f(x) \approx \exp[\log(f)'' (x^*)(x-x^*)^2]\]
+
+\vspace{.5cm}
+
+\pause
+
+Intuitively we can approximate any density $f$ with a Gaussian by:
+
+* matching the mode to the mean of the Gaussian, $\mu = x^*$
+* setting the variance by looking at the curvaure at the mode $\sigma = -1/\log(f)''(x^*)$
+
+## Basic INLA assumptions
+\framesubtitle{most verbose slide of the day}
+
+1. Each data point depends on only one of the elements in the latent Gaussian field $\theta$, the linear predictor
+\vspace{.15cm}
+
+2. The size of the hyperparameter vector $\psi$ is small (say < 15)
+\vspace{.15cm}
+
+3. The latent field $\theta$, can be large but it is endowed with some conditional independence (Markov) properties so that the precision matrix $\Sigma^{-1}(\psi)$ is sparse.
+\vspace{.15cm}
+
+4. The linear predictor depends linearly on the unknown smooth function of covariates.
+\vspace{.15cm}
+
+5. The inferential interest lies in the univariate posterior marginals $\pi(\theta_i|y)$ and $\pi(\psi_j|y)$ rather than in the joint posterior $\pi(\theta, \psi|y)$.
+
+## INLA
+\framesubtitle{it's time for the formulas}
+
+
+\begin{align*}
+\pi(\theta_i|y) & = \int \int \pi(\theta, \psi|y) d\theta_{-i} d\psi = \int \textcolor<3->{red}{\pi(\theta_{i}|\psi,y)} \textcolor<2->{gray}{\pi(\psi|y)}d\psi \\
+\only<2->{\widehat{\pi}(\theta_i|y) & = \sum_{k} \textcolor<3->{red}{\widehat{\pi}(\theta_{i}|\psi^{(k)},y)} \textcolor<2->{gray}{\widehat{\pi}(\psi^{(k)}|y)}\Delta^{(k)}}
+\end{align*}
+
+
+
+\pause
+
+\vspace{0.75cm}
+
+>- Approximate $\textcolor{gray}{\pi(\psi|y)}$ and $\textcolor{red}{\pi(\theta_{i}|\psi,y)}$ through Laplace Approximation 
+>- Approximate the integrals over $\psi$ with summations over a finite set of values $\psi^{(1)},\dots, \psi^{(K)}$
+
+
+
+
+
+## Back to our Basic INLA assumptions
+\framesubtitle{still most verbose slide of the day}
+
+1. Each data point depends on only one of the elements in the latent Gaussian field $\theta$, the linear predictor
+\vspace{.15cm}
+
+2. \textcolor{gray}{The size of the hyperparameter vector $\psi$ is small (say < 15)}
+\vspace{.15cm}
+
+3. The latent field $\theta$, can be large but it is endowed with some conditional independence (Markov) properties so that the precision matrix $\Sigma^{-1}(\psi)$ is sparse.
+\vspace{.15cm}
+
+4. The linear predictor depends linearly on the unknown smooth function of covariates.
+\vspace{.15cm}
+
+5. \textcolor{gray}{The inferential interest lies in the univariate posterior marginals $\pi(\theta_i|y)$ and $\pi(\psi_j|y)$ rather than in the joint posterior $\pi(\theta, \psi|y)$.}
+
+## Posterior of $\psi$
+\framesubtitle{starting from the ``deepest'' level}
+
+\[ \pi(\psi|y) = \frac{\pi(\theta, \psi|y)}{\pi(\theta | \psi, y)} \textcolor<1>{white}{\propto \frac{\pi(y| \theta, \psi) \pi(\theta | \psi) \pi(\psi)}{\pi(\theta | \psi, y)}}\]
+
+<!-- \pause -->
+
+<!-- * $\pi(y| \theta, \psi)$ is the Likelihood -->
+<!-- * $\pi(\theta | \psi)$ is the Latent Gaussian Field -->
+<!-- * $\pi(\psi)$ is the hyperprior  -->
+
+\pause 
+
+\vspace{0.5cm}
+
+Here comes the **Laplace approximation:**
+
+Approximate $\pi(\theta | \psi, y)$ with a Gaussian $\widehat{\pi}_G(\theta | \psi, y) = N(\theta; \mu, Q^{-1})$ wherer
+
+* $\mu$ is the mode of $\pi(\theta | \psi, y)$
+* $-Q$ is the curvature of $\log[\pi(\theta | \psi, y)]$ at the mode $\mu$
+
+\pause 
+
+\[ \widehat{\pi}(\psi|y) = \frac{\pi(\theta, \psi|y)}{\widehat{\pi}_G(\theta | \psi, y)} {\propto \frac{\pi(y| \theta, \psi) \pi(\theta | \psi) \pi(\psi)}{\widehat{\pi}_G(\theta | \psi, y)}}\]
+
+
+## INLA
+\framesubtitle{and we are back here}
+
+\begin{align*}
+\pi(\theta_i|y) & = \int \int \pi(\theta, \psi|y) d\theta_{-i} d\psi = \int \textcolor{red}{\pi(\theta_{i}|\psi,y)} \textcolor{gray}{\pi(\psi|y)}d\psi
+\end{align*}
+
+\vspace{0.5cm}
+
+
+- Approximate $\textcolor{gray}{\pi(\psi|y)}$ and $\textcolor{red}{\pi(\theta_{i}|\psi,y)}$ through Laplace Approximation
+- Approximate the integrals over $\psi$ with summations over a set of *carefully chosen* values $\psi^{(1)},\dots, \psi^{(K)}$
+
+\vspace{0.5cm}
+
+
+\begin{align*}
+\widehat{\pi}(\theta_i|y) & = \sum_{k} \textcolor{red}{\widehat{\pi}(\theta_{i}|\psi^{(k)},y)} \textcolor{gray}{\widehat{\pi}(\psi^{(k)}|y)}\Delta^{(k)}
+\end{align*}
+
+
+## Approximate the Posterior Latent Field 
+\framesubtitle{skipping all the details}
+
+\[ \pi(\theta_i|\psi, y) = \frac{\pi(\theta| \psi, y)}{\pi(\theta_{-i} |\theta_i, \psi, y)} \textcolor<1>{white}{\propto \frac{\pi(y|\theta, \psi)\pi(\theta|\psi)\pi(\psi)}{\pi(\theta_{-i} |\theta_i, \psi, y)}}\]
+
+
+\pause 
+
+\vspace{0.5cm}
+
+* **Gaussian**: use the marginals of $\widehat{\pi}_G(\theta | \psi, y)$ computed before
+* **Laplace approximation**: use a Gaussian approximation for the denominator $\pi(\theta_{-i} |\theta_i, \psi, y)$
+* **Simplified Laplace approximation**: a mix of the two
+
+
+
+
+## Putting everything together
+
+
+1. Explore the space of $\psi$ through the approximation $\widehat{\pi}(\psi|y)$. 
+\vspace{0.15cm}
+     - Find the mode of $\widehat{\pi}(\psi|y)$
+     - Select ${\psi^{(1)}, \dots, \psi^{(K)}}$ in the area of high density of $\widehat{\pi}(\psi|y)$
+\vspace{0.25cm}
+
+
+1. Compute $\widehat{\pi}(\psi^{(k)}|y)$ for each ${\psi^{(1)}, \dots, \psi^{(K)}}$
+\vspace{0.25cm}
+
+1. Compute $\widehat{\pi}(\theta_i|\psi^{(k)},y)$ for each ${\psi^{(1)}, \dots, \psi^{(K)}}$
+\vspace{0.25cm}
+
+1. Approximate $\pi(\theta_i|y)$ as $$\widehat{\pi}(\theta_i|y) = \sum_{k} \textcolor{red}{\widehat{\pi}(\theta_{i}|\psi^{(k)},y)} \textcolor{gray}{\widehat{\pi}(\psi^{(k)}|y)}\Delta^{(k)}$$
+
+
+# R-INLA
+
+## Installation
+\framesubtitle{it is non-trivial already}
+
+INLA is not on CRAN, so you need to specify the repository when you install it: 
+
+\vspace{0.75cm}
+
+
+```{r, echo = T, eval = F}
+install.packages("INLA", 
+                 repos = "https://inla.r-inla-download.org/R/stable", 
+                 dep = TRUE)
+```
+
+\vspace{0.25cm}
+
+`INLA` gets constant updating - check your version
+
+## Setting up the model
+\framesubtitle{building blocks of the \texttt{inla} call}
+
+The generic `inla` call  is structured as follows:
+
+```{r, echo = T, eval = FALSE}
+inla(formula, data, family)
+```
+
+\vspace{0.25cm}
+
+* `formula`: formula object that specifies the linear predictor
+
+
+* `data`: data frame with the data
+
+
+* `family`: string that indicate the likelihood family (default is Gaussian)
+
+
+## Toy Example
+\framesubtitle{most famous dataset ever}
+
+The basic formulation of a linear regression model is almost the same as the canonical `lm` function:
+
+
+```{r, echo = T, eval = F}
+library(INLA)
+
+data(iris)
+
+mod1  = inla(Petal.Length ~ 1 + Petal.Width, data = iris)
+
+mod1_lm = lm(Petal.Length ~ 1 + Petal.Width, data = iris)
+
+```
+
+
+## The `formula` argument
+\framesubtitle{how to specify the model components}
+
+The formula object specifies the building blocks of the linear predictor 
+
+$$y= k(\eta) + \epsilon  \qquad \quad \eta = x^t\beta + \sum_k f_k(z_k)$$
+
+
+```
+formula = y ~ x + f(id, model)
+```
+
+\vspace{0.25cm}
+
+
+The `f` terms contains random effect
+
+* `id` name of the variable 
+* `model` name of the model of the random effect corresponding to `id`
+
+
+
+## Toy Example
+\framesubtitle{most famous dataset ever}
+
+```{r, echo = T, eval = F}
+
+
+formula = Petal.Length ~ 1 + Petal.Width + f(Species, model = "iid")
+
+mod2= inla(formula, data = iris)
+
+```
+
+\vspace{0.25cm}
+
+
+**NB:** The list of all possible latent models can be found using:
+
+
+```{r, echo = T, eval = F}
+names(inla.models()$latent)
+inla.doc("ar1")
+```
+
+## The `data` argument
+\framesubtitle{how to input the observations to `inla`}
+
+Data are typically provided through a `data.frame` (although named `list` can also be used).
+
+\vspace{0.25cm}
+
+* If the response is a factor it must be converted to {0, 1} before calling `inla()`, as this conversion is
+not done automatic (as for example in `glm()`).
+\vspace{0.15cm}
+
+
+
+* If the covariate is binary it has to be converted to a `factor`, otherwise inla will treat it as numeric
+\vspace{0.15cm}
+
+
+* If we wish to predict the response variable for some observations, we need to specify the response variable of these observations as `NA`
+
+
+
+## The `family` argument
+\framesubtitle{how to specify the likelihood}
+
+The family argument is a string defining the likelihood of our model. 
+
+* each observation can have a different likelihood: vector of strings that indicate the likelihood family
+
+* depending on the likelihood we are using, we may have additional arguments to provide to the `inla()` call
+```{r, echo = T, eval = F} 
+inla(formula, data, family = "binomial", Ntrials)
+```
+
+* we may have more than one link function corresponding to each family (as in the `logit` or `probit` case).
+`control.family=list(control.link=list(model="model")))`
+
+\vspace{0.15cm}
+
+**NB:** The list of all possible likelihoods can be found using:
+
+```{r, echo = T, eval = F}
+names(inla.models()$link)
+```
+
+## Toy Example
+\framesubtitle{most famous dataset ever}
+
+```{r, echo = T, eval = F}
+
+data("Seeds")
+
+res = inla(formula= r ~ x1 + x2, data = Seeds,
+           family = "binomial", Ntrials = n,
+           control.family = list(control.link=list(model = "logit")))
+summary(res)
+```
+
+\vspace{0.75cm}
+
+To see all available likelihood and links you can use: 
+
+```{r, echo = T, eval = F}
+names(inla.models()$link)
+names(inla.models()$likelihood)
+```
+
+
+## Additional Arguments
+
+* `control.compute`: list with the specification of several computing variables such as dic which is a Boolean variable indicating whether the DIC of the model should be computed
+
+```{r, echo = T, eval = F}
+res = inla(Petal.Length ~ 1 + Petal.Width, data = iris,
+            control.compute = list(dic = TRUE))
+```
+
+
+* `control.predictor`: list with the specification of several predictor variables such as link which is the link function of the model, and compute which is a Boolean variable that indicates whether the \textcolor<2>{gray}{marginal} densities for the linear predictor should be computed.
+
+```{r, echo = T, eval = F}
+res = inla(Petal.Length ~ 1 + Petal.Width, data = iris,
+           control.predictor = list(compute = TRUE))
+```
+
+\pause
+
+<!-- ## YOUR TURN -->
+
+<!-- * Using the DIC for comparison assess whether adding a random effect for the species type is beneficial for iris Data -->
+
+<!-- * Use  -->
+
+
+<!-- ## Scottish Lip cancer -->
+
+
+<!-- \[y_i|\theta_i \sim \text{Poisson}(E_i\theta_i)\] -->
+
+<!-- * $y_i$ number of observed cases in area $i$   -->
+<!-- * $E_i$ expected number of cases in area $i$ -->
+<!-- * $\theta_i$ is the relative risk. If $\theta_i>1$ area $i$'s risk is higher than the average in the standard population.  -->
+
+
+<!-- \pause -->
+
+<!-- * $X_i$ -->
+
+<!-- \[\log \theta_i = \beta_0+\beta_1X_i\] -->
+
+
+<!-- ## CAR  -->
+
+<!-- Conditional Autoregressive models  -->
+
+
+## Even more additional arguments
+
+* `inla.emarginal()` and `inla.qmarginal()` calculate the expectation and quantiles, respectively, of the posterior marginals
+\vspace{0.25cm}
+
+* `inla.smarginal()` can be used to obtain a spline smoothing of the whole marginal
+\vspace{0.25cm}
+
+* `inla.tmarginal()` can be used to transform the marginals
+\vspace{0.25cm}
+
+* `inla.zmarginal()` provides summary statistics
+\vspace{0.25cm}
+
+* `inla.dmarginal()` computes the density at particular values
+
+
+
+
+<!-- ## Hospital Data -->
+
+<!-- ```{r} -->
+<!-- data("Surg") -->
+<!-- ``` -->
+
+<!-- ## The model -->
+
+<!-- \begin{align*} -->
+<!-- y_{i} & \sim \text{Binomial}(n_{i}, p_{i}) \\ -->
+<!-- u_i & \sim \text{N}(0, \sigma^2)\\ -->
+<!-- \alpha & \sim \text{N}(0, 1/\tau) -->
+<!-- \end{align*} -->
+
+<!-- \[\text{logit}(p_{i}) = \eta_{i} = \alpha + u_i \] -->
+
+
+<!-- * $\alpha$ is a **fixed intercept**, which encodes the *common* mortality pattern -->
+<!-- * $u_i$ is a **hospital-level** random effects, which represents the *hospital-specific* mortality pattern -->
+
+
+<!-- ## Adding Random effects -->
+
+
+

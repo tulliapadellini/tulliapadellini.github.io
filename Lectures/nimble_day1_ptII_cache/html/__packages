@@ -1,0 +1,8 @@
+base
+geoR
+nimble
+dplyr
+tidyr
+ggplot2
+ggmcmc
+coda

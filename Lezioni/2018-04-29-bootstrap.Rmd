@@ -1,0 +1,293 @@
+---
+title: "The almighty Bootstrap"
+subtitle: "un metodo per tutte le stagioni"
+date: 2016-11-02
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.align = "center")
+par(bty = "n")
+
+```
+
+### Ingredienti di base
+Riprendiamo il classico setup visto ad inferenza, ossia supponiamo di avere un campione $X_1,\dots X_n$ di variabili indipendenti ed identicamente distribuite (_i.i.d._) proveniente da una distribuzione $F$, dove $F(x) = \mathbb{P}(X_i\leq x)$. 
+
+Indichiamo con $\mu_F$ e $\sigma^2 _F$ rispettivamente la media e la varianza della generica variabile $X_i$. La notazione con $F$ sottoscritto serve a ricordare che sia $\mu_F$ che $\sigma^2_F$ sono funzioni della funzione di ripartizione, infatti:   
+
+- $\mu_F = \mathbb{E}_F[X_i] = \int xdF(x)$
+- $\sigma^2_F = \mathbb{V}_F[X_i] = \int (x-\mu)^2 dF(x)$
+
+Consideriamo poi una statistica $T_n =h(X_1,\dots,X_n)$. 
+
+***
+__Goal(s) di oggi:__ quantificare l'incertezza su $T_n$
+
+- stimandone la varianza $\mathbb{V}_F [T_n]$ 
+- costruendo un intervallo di confidenza per $T_n$
+
+***
+
+## Stima della Varianza
+
+__Attenzione__: la varianza di una statistica $T_n$ è sempre una funzione della funzione di ripartizione $F$, che è incognita. 
+Un esempio? Consideriamo la statistica più famosa di sempre, la media campionaria, ossia $T_n =\bar{X}_n$. Sempre da inferenza ricordiamo che $$\mathbb{V}[\bar{X}_n]=\frac{\mathbb{V}[X]}{n} = \frac{1}{n}\int (x-\mu)^2 dF(x).$$
+
+In generale possiamo scrivere la quantità di interesse  $\mathbb{V}_F [T_n]$ come un integrale, e la settimana scorsa avete visto che, usando metodi Monte Carlo, si possono approssimare integrali molto complicati simulando.
+
+Nel nostro esempio il problema sarebbe ridotto a:
+
+1. Generare un nuovo campione $X_1^*,\dots,X_n^* \sim F$
+1. Calcolare $T_n^* =h(X_1^*,\dots,X_n^*)$
+1. Ripetere il procedimento $B$ volte in modo da ottenere $T_{n,1}^*,\dots, T_{n,B}^*$ osservazioni 
+1. Approssimare  $\mathbb{V}_F [T_n]$ con la varianza campionaria di $T_{n,1}^*,\dots, T_{n,B}^*$; per la legge dei grandi numeri si ha che al crescere di $B$
+$$ vboot = \frac{1}{B}\sum_{i=1} ^B (T^*_{n,i} - \bar{T}^*)^2 \rightarrow \mathbb{V}_F [T_n]. $$
+
+
+Purtroppo $F$ è incognita e non possiamo usarla per generare nuove osservazioni, ma possiamo stimarla. L'idea alla base del bootstrap è semplice:
+
+1. Stimare $F$ incognita con una $\hat{F}$ _nota_ (e di conseguenza stimare $\mathbb{V}_F [T_n]$ con $\mathbb{V}_{\hat{F}} [T_n]$).
+1. Approssimare $\mathbb{V}_{\hat{F}} [T_n]$ simulando da $\hat{F}$. 
+
+Nel bootstrap ci sono dunque due tipi di errore: 
+
+1. $\hat{F}$ non è $F$ (e la differenza potrebbe non essere trascurabile)
+2. $vboot \approx \mathbb{V}_{\hat{F}} [T_n]$ (ma questo errore puè essere reso piccolo a piacere).
+
+
+### Bootstrap Empirico (o non-parametrico) 
+Il modo più semplice di stimare la funzione di ripartizione $F$ è attraverso la funzione di ripartizione empirica $\mathbb{F}_n$, definita come $$\mathbb{F}_n(x) = \sum_{i=1}^n \mathbb{I}[X_i\leq x].$$
+
+La distribuzione empirica mette massa di probabilità $1/n$ su ciascuna osservazione $X_i$ quindi simulare da $\mathbb{F}_n$ non vuol dire altro estrarre con ripetizione dal campione "originale" $X_1,\dots, X_n$. 
+
+__ESEMPIO:__ 
+
+Consideriamo $X_1,\dots, X_n \sim N(0,1)$.
+```{r}
+Xn = rnorm(100)
+```
+Per generare un campione $X_1^*,\dots, X_n^* \sim \mathbb{F}_n$ possiamo usare la funzione `sample`:
+```{r}
+Xstar = sample(Xn, size=100, replace=TRUE)
+```
+
+Confrontiamo ora la distribuzione empirica con quella teorica:
+```{r}
+hist(Xn, col=rgb(1,0,0,.3), probability = T, main="")
+hist(Xstar, add=TRUE, col=rgb(0,0,1,.3), probability = T)
+curve(dnorm, col="red", lwd=3, add=TRUE)
+```
+
+La ragione per cui scegliamo $\mathbb{F}_n$ come stima di $F$ è che al crescere della numerosità campionaria $n$, le due distribuzioni sono equivalenti.
+```{r}
+Xn = rnorm(10000)
+Xstar = sample(Xn, size=10000, replace=TRUE)
+
+hist(Xn, col=rgb(1,0,0,.3), probability = T)
+hist(Xstar, add=TRUE, col=rgb(0,0,1,.3), probability = T)
+curve(dnorm, col="red", lwd=3, add=TRUE)
+```
+
+
+
+
+#### ESEMPIO: Bootstrap per la mediana
+Ora (finalmente!) vediamo come calcolare la stima bootstrap della varianza di una statistica, in particolare scegliamo $T_n = \text{Mediana}(X_1,\dots, X_n)$. 
+
+```{r}
+Xn = rexp(100)
+Tn = median(Xn)
+
+boot.median=function(X, B=10000){
+  Tstar=c()
+  for(i in 1:B ){
+    Xstar = sample(Xn, size=length(Xn), replace=TRUE)
+    Tstar[i] = median(Xstar)
+  }
+  return(Tstar)
+}
+
+boot.emp = boot.median(Xn)
+```
+L'approssimazione di $\mathbb{V}_{\hat{F}} [T_n]$ è:
+```{r}
+var(boot.emp)
+```
+Il vettore `Tstar` contiene il campione $T_{n,1}^*,\dots, T_{n,B}^*$, possiamo analizzarne la distribuzione campionaria:
+```{r}
+hist(boot.emp, col=rgb(.0,.6,.3,.3), probability = T)
+```
+
+
+### Bootstrap Parametrico
+Utilizzare la distribuzione empirica non è l'unico modo di stimare $F$. Ad esempio se $F$ è una distribuzione parametrica, $F=F_{\theta}$, possiamo usare il campione $X_1,\dots,X_n$ per ottenere una stima $\hat{\theta}$ per il parametro $\theta$ e considerare lo stimatore plug-in $\hat{F}=F_{\hat{\theta}}$.
+
+Consideriamo lo stesso esempio di prima, i.e. un campione di $n=100$ osservazioni generate da una v.a. esponenziale di parametro $\lambda=1$. Supponiamo di non conoscere il parametro e di doverlo stimare, ad esempio con il metodo della massima verosimiglianza:
+```{r}
+LL = function(lambda) {
+    R = dexp(Xn, lambda)
+    -sum(log(R))
+}
+
+lambda = optim(par=1, LL)$par
+
+```
+
+```{r}
+param.boot.median=function(X, thetahat, B=10000){
+  Tstar=c()
+  for(i in 1:B ){
+    Xstar = rexp(length(X), rate=thetahat)
+    Tstar[i] = median(Xstar)
+  }
+  return(Tstar)
+}
+
+boot.param = param.boot.median(Xn, thetahat = lambda)
+```
+L'approssimazione di $\mathbb{V}_{\hat{F}} [T_n]$ è:
+```{r}
+var(boot.param)
+```
+Il vettore `Tstar` contiene il campione $T_{n,1}^*,\dots, T_{n,B}^*$, possiamo analizzarne la distribuzione campionaria:
+```{r}
+hist(boot.emp, col=rgb(0,.6,0.3,.3), probability = T, main = "")
+hist(boot.param, col=rgb(0,.1,.6,.3), probability = T, add=TRUE)
+```
+
+##### Bootstrap Empirico vs Parametrico
+
+- Se il modello è specificato correttemente, il bootstrap parametrico è preferibile perchè $F_{\hat{\theta}}$ converge ad $F$ più velocemente di $\mathbb{F}_n$.
+- Se l'assunzione distribuzionale è sbagliata però, $F_{\hat{\theta}}$ non converge ad $F$.
+
+
+
+## Intervalli di Confidenza
+Esistono diversi modi per costruire intervalli di confidenza utilizzando procedure bootstrap.
+
+#### 1. Approssimazione Normale
+Se la statistica $T_n$ ha distribuzione approssimativamente normale, possiamo utilizzare 
+$$T_n \pm z_{1-\alpha/2} \sqrt{vboot} $$
+
+Consideriamo l'esempio dell'esponenziale. In questo caso la distribuzione campionaria della statistica $T_n =\text(Mediana)(X_1,\dots,X_n)$ può essere considerata normale:
+```{r}
+hist(boot.param, col=rgb(.1,.0,.6,.3), prob=TRUE)
+qqnorm(boot.param, pch=20, col=rgb(.8,0,.4,.4))
+qqline(boot.param)
+```
+
+L'intervallo di confidenza per $T_n$ è quindi:
+```{r}
+L.int = Tn - 1.96 * sd(boot.param)
+U.int = Tn + 1.96 * sd(boot.param)
+N.int = c(L.int, U.int)
+N.int
+```
+
+#### 2. Percentili 
+Abbiamo detto che $T_{n,1}^*,\dots, T_{n,B}^*$ è un campione, largo a piacere, dalla distribuzione campionaria di $T_n$. Fino ad ora ci siamo limitati ad usarlo per stimare la varianza ma possiamo farci molto di più! Ad esempio possiamo usare questo campione per stimare i quantili della distribuzione di $T_n$. Un modo immediato per costruire un intervallo di confidenza è dunque usando i quantili empirici di livello $\alpha/2$ e $(1-\alpha/2)$, $T^*_{n,\alpha/2}, T^*_{n,1-\alpha/2}$ come estremi. 
+
+```{r}
+Perc.int = quantile(boot.param, c(0.025, 0.975))
+Perc.int
+```
+
+#### 3. Quantità pivotali 
+Il metodo dei percentili è immediato ma potrebbe non essere molto accurato, un'alternativa lievemente più precisa è il metodo del pivot, che considera la quantità pivotale $T^*_n - T_n$. 
+L'intervallo che si ottiene con questo metodo è il seguente:
+$$[2T_n - T^*_{n,1-\alpha/2}, 2T_n -T^*_{n,\alpha/2}] $$
+
+```{r}
+Pivot.int = c(2*Tn - quantile(boot.param, c(0.975, 0.025))) 
+Pivot.int
+```
+
+__EXTRA - "Studentizzazione":__ Il metodo delle quantità pivotali standard si basa sull'assunzione che $T_n - T$ e $T^*_n - T_n$ abbiano approssimativamente la stessa distribuzione. Quando questo non è vero, si può ricorrere alla studentizzazione, ossia considerare:
+$$\tau = \frac{T_n - T}{\sqrt{\mathbb{V}[T_n]}} $$
+$$\tau^* = \frac{T^*_n - T_n}{\sqrt{\mathbb{V}[T^*_n]}} $$
+
+Il vantaggio delle quantità "studentizzate" $\tau$ e $\tau^*$ è che hanno approssimativamente la stessa distribuzione anche quando $T_n - T$ e $T^*_n - T_n$ hanno distribuzioni diverse. Lo svantaggio di questo metodo è che richiedono un secondo giro di bootstrap per stimare la quantitè $\sqrt{\mathbb{V}[T^*_n]}$
+
+## Errori \& Subsampling
+Riprendiamo "Old Faithful", i dati che avete visto nell'homework 1(?) relativi alla durata e ai tempi di attesa delle eruzioni di un vulcano.
+```{r}
+data("faithful")
+```
+Supponiamo di essere interessati a studiare la durata massima di un'eruzione, ossia $T_n=X_{(n)}=\max\{X_1,\dots,X_n\}$:
+```{r}
+Xn = faithful$eruptions
+Tn = max(Xn)
+Tn
+
+boot.max=function(X, B=10000){
+  Tstar=c()
+  for(i in 1:B ){
+    Xstar = sample(X, size=length(X), replace=TRUE)
+    Tstar[i] = max(Xstar)
+  }
+  
+  int.boot = 2*max(X) - quantile(Tstar, c(0.975, 0.025))
+  
+  return(list(Tstar=Tstar, int.boot=int.boot))
+}
+
+boot.faith = boot.max(Xn)
+```
+La distribuzione campionaria di $X_n$ stimata con il bootstrap è un po' "strana".
+```{r}
+hist(boot.faith$Tstar, probability = TRUE, col=rgb(.9,0,0,.3), main="")
+```
+
+Cerchiamo di capire se è un caso isolato o se c'è un problema di fondo. Siano $X_1,\dots,X_n\sim U(0, \theta)$, e sia $\hat{\theta}=X_{(n)}=max\{X_1,\dots,X_n\}$. Poniamo $\theta=1$ e generiamo un campione di $n=50$ osservazioni: 
+```{r}
+Xn = runif(50)
+Tn = max(Xn)
+Tn
+
+boot.prova = boot.max(Xn)
+```
+
+Ricordiamo che nel caso di $X_1,\dots,X_n\sim U(0, \theta)$ la distribuzione di $X_{(n)}$ è $$\mathbb{P}(X_{(n)}<x)= \left(\frac{x}{\theta}\right)^n.$$ Confrontiamo la distribuzione stimata dal bootstrap con quella teorica (in blu).
+```{r}
+hist(boot.prova$Tstar, breaks=seq(0,1.3,by=0.05), prob= T, main="", col=rgb(.3,0.3,.7,.3))
+curve(x^50, add=T, col="darkblue", lwd=4)
+```
+
+Le due distribuzioni sembrano comportarsi in modo diverso. Vediamo quali sono gli effetti di questa differenza sulla stima intervallare:
+Costruiamo 1000 intervalli bootstrap e vediamo la proporzione di questi in cui è contenuto il vero valore del parametro $\theta=1$:
+```{r}
+boot.cis = replicate(1000, boot.max(X = runif(50), B = 1000)$int.boot)
+true.coverage = mean((1 >= boot.cis[1, ]) & (1 <= boot.cis[2, ]))
+true.coverage
+```
+La copertura degli intervalli è decisamente inferiore a $0.95$! 
+In generale il bootstrap si comporta "male" nelle stime degli estremi. 
+
+
+Una possibile soluzione a questo problema è utilizzare un altro metodo di ricampionamento, il _subsampling_. In sostanza il subsampling è molto simile al bootstrap empirico, solo che al posto di ricampionare con ripetizione $n$ elementi dai dati osservati, il campione di subsampling viene creato estraendo senza ripetizione $m$ unitè dal campione originale ($m$ deve essere piccolo). 
+
+```{r}
+sub.max=function(X, B=10000, m){
+  Tstar=c()
+  for(i in 1:B ){
+    Xstar = sample(X, size=m, replace=FALSE)
+    Tstar[i] = max(Xstar)
+  }
+  
+  int.boot = 2*max(X) - quantile(Tstar, c(0.975, 0.025))
+  return(list(Tstar=Tstar, int.sub=int.boot))
+}
+
+
+Xn = runif(50)
+Tn = max(Xn)
+Tn
+
+sub.prova = sub.max(Xn, m=20)
+```
+
+Analizziamo ora la copertura degli intervalli creati con il subsampling:
+```{r}
+sub.cis = replicate(1000, sub.max(X = runif(50), B = 1000, m=25)$int.sub)
+true.coverage = mean((1 >= sub.cis[1, ]) & (1 <= sub.cis[2, ]))
+true.coverage
+```

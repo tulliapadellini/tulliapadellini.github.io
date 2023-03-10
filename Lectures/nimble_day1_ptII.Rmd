@@ -1,0 +1,677 @@
+---
+title: "Making sense of a nimble model"
+subtitle: "Spatial and spatio-temporal models with NIMBLE"
+author: "Tullia Padellini"
+date: "1 July 2021"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, cache = TRUE, fig.align = 'center', fig.width = 10)
+```
+
+
+# Malaria Prevalence in The Gambia
+
+We now show how to use NIMBLE in a real data example, and we analyse the prevalence of malaria among children in The Gambia.
+
+We start by importing the data:
+
+```{r import}
+library(geoR)
+data(gambia)
+gambia <- gambia[1:1500, ]
+
+nrow(gambia)
+head(gambia)
+```
+This dataset consists of observations about $N=500$ children living in The Gambia who were tested for malaria. For each children the following variables are recorded and reported:
+
+* `pos`: presence (1) or absence (0) of malaria in a blood sample taken from the child
+* `age`: age of the child, in days
+* `netuse`: indicator variable denoting whether (1) or not (0) the child regularly sleeps under a bed-net.
+* `treated`: indicator variable denoting whether (1) or not (0) the bed-net is treated (coded 0 if netuse=0).
+* `phc`: indicator variable denoting the presence (1) or absence (0) of a health center in the village.
+
+These variables are very different in nature: `age` is a numeric variable,
+while `pos`, `netuse`, `treated` and `phc` are categorical variables, encoded 
+into $1$ or $0$. When the categorical variable assumes only $2$ values (denoting 
+the presence or absence of the character) they are typically called binary dummy variables. 
+
+
+## Model Specification
+
+Our goal for the analysis is to assess whether the probability that a child has a positive
+test is affected by any of the aforementioned variables. Since the response variable
+`pos` is a binary variable, standard linear regression is not appropriate and we turn
+to Generalized Linear Models instead.
+
+One way to model these data is to fit a logistic regression model. 
+We assume that for each child $i$, the presence or absence of malaria `pos`$_i$
+follows a Bernoulli distribution with parameter $p_i$, so that
+\[P({\tt pos}_i = 1 | \text{all the rest}) = p_i\]
+
+We can then formulate a logistic regression model in a Bayesian way as follows.
+
+\begin{eqnarray*}
+{\tt pos}_i & \sim & \hbox{Bernoulli}(p_i)\\
+\hbox{logit}(p_i) & = & \beta_0 + \beta_{age} {\tt age}_i +  \beta_{net} {\tt netuse}_i +
+                        \beta_{tre} {\tt treated}_i + 
+                        \beta_{phc} {\tt phc}_i
+\end{eqnarray*}
+
+Remember that the *logit* transformation is equal to the log-odds, i.e.
+$$\hbox{logit}(p_i) = \log \left(\frac{p_i}{1 - p_i}\right)$$ and is useful for transforming a probability 
+(which is constrained to lie between 0 and 1) onto the range $(-\infty, +\infty)$.
+
+In a Bayesian analysis, we need to assume prior distributions for any unknown 
+model parameters. In this case, we have specified the success rate parameters of 
+the binomial ($p_i$) as functions of regression coefficients and covariates,
+so we need to specify priors on the regression coefficients. As we will see later,
+the interpretation of the regression coefficient varies depending on the type of 
+variable it refers to (i.e. binary or numerical), however the fitting procedure 
+is unchanged. 
+
+We will choose vague, uniform priors for each coefficient:
+
+\begin{eqnarray*}
+\beta_j & \sim & \hbox{Normal}(0, \sigma = 10)\\
+\end{eqnarray*}
+
+
+```{r eval = TRUE, echo = FALSE, fig.height=5}
+curve(dnorm(x, 0, 10), -50, 50)
+```
+
+The `logit` link is implemented in `nimble`, hence writing the model is straightforward:
+```{r}
+library(nimble)
+
+regCode <- nimbleCode({
+
+    # likelihood:  
+	   for( i in 1 : N ) {
+		    y[i] ~ dbin(p[i], 1) 
+	     # remember that a Bernoulli distribution
+	     # can be seen as a Binomial with n = 1
+	     
+ 	       logit(p[i]) <- beta0 + beta_age * age[i] + beta_net * netuse[i] +
+                        beta_tre * treated[i] + beta_phc * phc[i]
+	   }
+	
+  # priors:
+	   beta0 ~ dnorm(0, sd = 10)
+
+	   beta_age ~ dnorm(0, sd = 10)
+	   beta_net ~ dnorm(0, sd = 10)
+	   beta_tre ~ dnorm(0, sd = 10)
+	   beta_phc ~ dnorm(0, sd = 10)
+
+})
+```
+
+It may be cumbersome to specify separately for each regressio coefficient. You can 
+opt for a vector representation of the coefficients of the fixed efffects.
+Let us create a vector `beta` containing all the regression coefficient of our model,
+and specify the priors through a for loop:
+```{r}
+regCode2 <- nimbleCode({
+	   for( i in 1 : N ) {
+		    y[i] ~ dbin(p[i], 1)
+ 	      logit(p[i]) <- beta0 + beta[1] * age[i] + beta[2] * netuse[i] +
+                       beta[3] * treated[i] + beta[4] * phc[i]
+ 	      }
+	
+    beta0 ~ dnorm(0, sd = 10)
+    for( j in 1:K){ # K is the number of covariates
+	    beta[j] ~ dnorm(0, sd = 10)
+    }
+
+})
+```
+
+Finally you can have an even more general and compact formulation of the model
+by exploiting `nimble` matrix operations, and 
+more specifically the `inprod` function. Let us assume that all the covariates 
+are stored as columns in a matrix `x`. This means that `x[i,]` is a vector
+representing the measurements of the covariates of interest `age`, `netuse`,
+`treated`, `green` and `phc` on the $i$-th child. 
+
+```{r}
+regCode3 <- nimbleCode({
+	   for( i in 1 : N ) {
+		    y[i] ~ dbin(p[i], 1)
+ 	      logit(p[i]) <- beta0 + inprod(beta[], x[i,])  
+ 	      # remember when you have vectors or matrices you always have to acknowledge
+ 	      # the fact that they are not univariate through the use of []
+	   }
+
+  	
+    beta0 ~ dnorm(0, sd =10)
+
+    for( j in 1:K){
+	    beta[j] ~ dnorm(0, sd = 10)
+    }
+    
+
+})
+```
+
+Finally, as this is not a linear model but a GLM, we are not interested much in 
+the coefficient $\beta$ per se, but in their transformation $B = \exp(\beta)$, 
+which we need to include in the model as a deterministic node: 
+
+```{r}
+regCode3 <- nimbleCode({
+	   for( i in 1 : N ) {
+		    y[i] ~ dbin(p[i], 1)
+ 	      logit(p[i]) <- beta0 + inprod(beta[], x[i,])  
+	   }
+
+  	
+    beta0 ~ dnorm(0, sd = 10)
+    B0 <- exp(beta0)
+    
+    for( j in 1:K){
+	    beta[j] ~ dnorm(0, sd = 10)
+      B[j] <- exp(beta[j])
+    }
+
+})
+```
+
+## Model Fit
+
+We start by creating the data objects to be inputted in the model.
+
+```{r}
+N <- nrow(gambia) # reduce the dimension of the data to speed up computation
+
+y <- gambia$pos
+
+# remove the coordinates and the response variable from the dataset:
+x <- as.matrix(gambia[, c("age", "netuse", "treated", "phc")])
+
+regConsts <- list(K = 4, N = N)
+regData   <- list(y = y, x = x)
+
+regInits  <- list(beta0 = 0, beta = rep(0, 4))
+```
+
+Notice that the covariates are accessed in the `nimbleCode` as a matrix:
+```
+logit(p[i]) <- beta0 + inprod(beta[], x[i,])  
+```
+hence when we input them in the `data` object we input them as a matrix. 
+
+Dummy or binary variables such as `netuse` have to be fed to the model 
+as vectors of integers, 1 for presence, 0 for absence of the attribute of interest.
+This is different from other `R` packages for fitting GLMs, which require
+categorical variables to be provided as factors. 
+```{r dummies}
+str(x)
+```
+In this case our data already have the desired format. 
+If your categorical variable has $J>2$ classes, you need to convert it into $K-1$
+dummy variables. 
+
+</br>
+
+Let us run the model:
+```{r model_slow}
+t0 = Sys.time()
+mcmc.out <- nimbleMCMC(code = regCode3, 
+                       constants = regConsts,
+                       data = regData, 
+                       inits = regInits,
+                       nchains = 2, 
+                       niter = 150000,
+                       nburnin = 50000, 
+                       thin = 50,
+                       samples = TRUE,
+                       samplesAsCodaMCMC = TRUE,
+                       summary = TRUE, 
+                       WAIC = TRUE,
+                       monitors = c('beta0','beta', 'B0', 'B'))
+t1 = Sys.time() - t0
+t1
+
+```
+
+As you can see it is relatively fast (it should take approx 2/3 minutes)
+Let us check the convergence, starting with the inspection of the traceplots. 
+Remember, since we set `samplesAsCodaMCMC = TRUE` the samples will be returned 
+as objects of class `mcmc.list`, which allows us to use other packages such as 
+`ggmcmcm` for visualization and diagnostic. 
+
+Analysing the samples is critical for assessing the convergence to the stationary 
+distibution of the MCMC algorithm. 
+
+**Always remember**: you can never be *sure* that your chain has reached the
+stationary distribution. The rationale behind convergence diagnostic is to flag
+any obvious problem and avoid drawing inferential conclusions from Markov Chains
+which have clearly not reached convergence. 
+In other words: you can prove that the chain has not reached convergence (hence 
+be sure that inferential conclusions will not be reliable) but you cannot **prove**
+convergence. 
+
+When we talk about *assessing convergence* we thus refer to the class of methods
+voted to check that the chain has **not** reached convergence.
+
+`nimble` does not provide any convergence diagnostics, but it is possible to 
+exploit other `R` packages such as `coda` or `ggmcmc` with the MCMC output from 
+a `nimble` MCMC to assess convergence.
+
+
+
+## Graphical checks
+
+The first way to do so is by simply plotting the sampled values in a traceplot. 
+```{r}
+library(ggmcmc)
+library(coda)
+S <- ggs(mcmc.out$samples[, c("beta0", "beta[1]", "beta[2]", "beta[3]", "beta[4]")])
+
+ggs_traceplot(S)
+
+ggs_autocorrelation(S)
+```
+
+
+```{r}
+mcmc.out$summary
+```
+
+Notice the difference in the estimate of the posterior mean and the posterior 
+variance of the parameter $\beta$. In general when you reach convergence different 
+chains will look similar (hence their summary will be close as well). 
+
+```{r}
+ggs_compare_partial(S)
+```
+
+
+The same kind of information can be seen from the density plots. This is an estimate
+of the posterior distribution of the parameter at hand. 
+```{r}
+ggs_density(S)
+```
+
+If the chains have reached convergence the resulting estimate of the posterior 
+distribuition should be similar, but this is not the case here. 
+In addition, as you can see, the density plot is very wiggly, meaning that the parameter space
+has probably not been explored properly, but the chain was stalling in certain 
+areas due to high autocorrelation. 
+
+The traceplot clearly showed how each draw of the Markov Chain is related to the
+previous one, a more formal way to assess this is through the autocorrelation 
+plot, which you can obtain in a `ggplot` fashion using the function `ggs_autocorrelation`:
+
+```{r}
+ggs_autocorrelation(S)
+```
+
+Each bar of the autocorrelation plot represent a different lag. Roughly speaking 
+the first bar represent the correlation of each element with itself (hence we 
+expect it to be 1), the second bar represent the correlation of each random draw 
+of the Markov Chain with the previous one, and so on and so forth. 
+
+Ideally we would like the MCMC to produce a sample of observations from the 
+posterior distribution that can be treated as i.i.d., the more correlation we observe
+between lags, the more it is unrealistic to believe in the *independence* of our
+observations. 
+
+
+
+
+## Univariate indicators
+
+A second class of methods for assessing convergence is based on univariate indicators
+summarizing the behavior of the chains. 
+
+### Geweke Diagnostic
+
+The first univariate indicator of convergence we consider is the  *Geweke z-score diagnostic*.
+The basic idea behind the Geweke diagnostic is that when the chain has reached convergence, 
+its first and its last part will follow the same distribution (the actual posterior distribution). 
+From a technical point of view, the Geweke diagnostic is the z-score of a 
+frequentist comparison of means. If the chains have converged, one would expect
+the score to be between -2 and 2 with a confidence level of 95 percent.
+
+This value is computed for each chain and can be used to assess convergence even
+if we run only one chain. 
+```{r}
+ggs_geweke(S)
+```
+
+### Gelman Diagnostic (Rhat)
+
+The Potential Scale Reduction Factor (often referred to as *R hat* or 
+*Gelman-Rubin diagnostic*) compares the patterns of different chains for the same 
+parameter. Its core idea is to compare the between-chain variation with the 
+within-chain variation. Intuitively, if the chains have reached convergence, 
+variation between and within chains should be similar, and when this happens 
+the R hat is expected to be close to 1. 
+
+Let us compare this diagnostic for the two mcmc run:
+```{r}
+gelman.diag(mcmc.out$samples, confidence = 0.95, transform=FALSE, autoburnin=TRUE,
+                   multivariate=TRUE)
+
+```
+
+
+You can also visualize this with `ggmcmc`:
+```{r}
+ggs_Rhat(S) + xlab("R_hat")
+```
+
+
+### Effective sample size
+
+The effective sample size represent the sample size "adjusted" for autocorrelation. 
+The intuitive idea is that the closer the effective sample size is to the actual
+size, the more is likely that the chain has reached the stationary distribution. 
+
+Let us check the effective sample sizes for the two MCMC run we considered so far. 
+Remember that after burn-in and thinning both MCMC runs returned 1000 observations per chain.
+
+```{r}
+effectiveSize(mcmc.out$samples$chain1) 
+```
+
+As you see above, the effective sample size can be larger than the actual size. 
+This happens when there is negative autocorrelation. Don't be mistaken by the fact
+that a larger sample size is typically considered good news, in this case every 
+deviation from the actual sample size is equally bad.
+
+
+Now let us focus on the results
+```{r}
+mcmc.out$summary
+
+```
+First thing notice that the results for the two chains are fairly similar 
+(which is yet again reassuring in terms of convergence). 
+
+Then notice that the 95% credibility interval for the coefficients
+$\beta_4$, corresponding to the variable `phc` contains the $0$. 
+
+It would be interesting to understand whether or not this variable
+contributes to the model or if it only adds noise, and in order to do so we 
+compare our model with one without it. 
+
+```{r model_restr}
+
+N <- nrow(gambia) # reduce the dimension of the data to speed up computation
+
+
+y <- gambia$pos
+
+# remove the coordinates and the response variable from the dataset:
+x_restr <- as.matrix(gambia[, c("age", "netuse", "treated")])
+
+regConsts_restr <- list(K = 3, N = N)
+regData_restr  <- list(y = y, x = x_restr)
+
+regInits_restr  <- list(beta0 = 0, beta = rep(0, 3))
+
+t4 = Sys.time()
+mcmc.out_restr <- nimbleMCMC(code = regCode3, 
+                       constants = regConsts_restr,
+                       data = regData_restr, 
+                       inits = regInits_restr,
+                       nchains = 2, 
+                       niter = 150000,
+                       nburnin = 50000, 
+                       thin = 50,
+                       samples = TRUE,
+                       samplesAsCodaMCMC = TRUE,
+                       summary = TRUE, 
+                       WAIC = TRUE,
+                       monitors = c('beta0','beta', 'B0', 'B'))
+t5 = Sys.time() - t4
+t5
+```
+
+Notice that since we specified our model in a very general way, 
+there is no need to change the `nimbleCode`. 
+
+Quick check of the diagnostics:
+```{r}
+S_restr <- ggs(mcmc.out_restr$samples[, c("beta0", "beta[1]", "beta[2]", "beta[3]")])
+
+ggs_traceplot(S_restr)
+ggs_autocorrelation(S_restr)
+ggs_geweke(S_restr)
+ggs_Rhat(S_restr) + xlab("R_hat")
+```
+
+```{r}
+mcmc.out_restr$summary
+```
+
+## Model comparison
+
+There are several ways to select the model. The easiest one in nimble is to use 
+the WAIC, an information based metric which accounts for model-fit as well as model-complexity. 
+
+`nimble` can compute the WAIC when setting `WAIC = TRUE` in the `nimbleMCMC` call.
+
+Let us compare the WAIC for the two models:
+```{r WAIC, eval = TRUE}
+mcmc.out$WAIC
+mcmc.out_restr$WAIC
+```
+
+You should always prefer the model with the smallest WAIC. In this case, even though
+the difference is little, the restricted model seems to be the best one. 
+
+## Interpretation
+
+Let us now try to understand what is the interpretation of our estimates:
+
+```{r summary}
+mcmc.out_restr$summary
+```
+
+
+Remember that the model we are trying to fit is:
+\begin{eqnarray*}
+\log \left(\frac{p_i}{1 - p_i}\right) & = & \beta_0 + \beta_{age} {\tt age}_i +  \beta_{net} {\tt netuse}_i +
+                        \beta_{tre} {\tt treated}_i 
+\end{eqnarray*}
+
+
+* `netuse`, `treated`: the exponentiated coefficients $B_2$ (and $B_3$) represent the relative increase in the
+odds of the disease, going from respectively `netuse` = 0 to `netuse` = 1 (and `treated`=0 to `treated`=1) holding all the other factors fixed (or *adjusting* for all the other variables). 
+* `age`: analogously the exponentiated coefficients $B_1$ represents the relative increase in the
+odds of the disease, when increasing `age` of $1$ unit holding all the other factors fixed (or *adjusting* for all the other variables). 
+
+It may be tempting to draw conclusion on the causality of the relation between the covariates 
+and the response variable, and assume that if we were to provide an intervention and, for example, increase
+one variable by one unit for every individual in a population, then the expected response would
+change by some estimated factor. This is a causal interpretation which is not appropriate in most
+situations, and never in observational studies, because unmeasured variables that
+are associated with both the response and the covariates will be contributing to the observed association between the response and the covariates.
+
+## Posterior predictive checks
+
+It is important to assess the performance of the model in terms of predictive checks as well.
+The `nimble` model we have specified before does not allows us to recover the predictive 
+distribution of the $y$, we need to change the specification to obtain it. 
+
+```{r eval =TRUE}
+
+N <- nrow(gambia) 
+
+y <- gambia$pos
+
+# remove the coordinates and the response variable from the dataset:
+x <- as.matrix(gambia[, c("age", "netuse", "treated", "phc")])
+
+regConsts <- list(K = 4, N = N)
+regData_pp   <- list(y = y, x = x)
+
+regInits  <- list(beta0 = 0, beta = rep(0, 4))
+
+regCode_pp <- nimbleCode({
+	   for( i in 1 : N ) {
+		    y[i] ~ dbin(p[i], 1)
+ 	      logit(p[i]) <- beta0 + inprod(beta[], x[i,])  
+ 	      y_pred[i] ~ dbin(p[i], 1) # predictions
+	   }
+
+    pred_mean <- mean(y_pred[1:N])
+  
+    beta0 ~ dnorm(0, sd = 10)
+    B0 <- exp(beta0)
+    
+    for( j in 1:K){
+	    beta[j] ~ dnorm(0, sd = 10)
+      B[j] <- exp(beta[j])
+    }
+
+})
+```
+
+
+Even though we added one node to the model, we do not need to add initial values
+nor additional constants to the model. The only change we require is to add the 
+predictive distribution `y_pred` to the monitors, in order to retain output from them. 
+```{r model_pp, eval = TRUE }
+t6 = Sys.time()
+
+
+mcmc.out_restr_pp <- nimbleMCMC(code = regCode_pp, 
+                       constants = regConsts_restr,
+                       data = regData_restr, 
+                       inits = regInits_restr,
+                       nchains = 2, 
+                       niter = 150000,
+                       nburnin = 50000, 
+                       thin = 50,
+                       samples = TRUE,
+                       samplesAsCodaMCMC = TRUE,
+                       summary = TRUE, 
+                       WAIC = TRUE,
+                       monitors = c('beta0','beta', 'B0', 'B', 'y_pred', 'pred_mean'))
+
+# We focus on the restricted model but the same code would apply for the full model as well:
+# mcmc.out_full_pp <- nimbleMCMC(code = regCode_pp, 
+#                        constants = regConsts,
+#                        data = regData, 
+#                        inits = regInits,
+#                        nchains = 2, 
+#                        niter = 150000,
+#                        nburnin = 50000, 
+#                        thin = 50,
+#                        samples = TRUE,
+#                        samplesAsCodaMCMC = TRUE,
+#                        summary = TRUE, 
+#                        WAIC = TRUE,
+#                        monitors = c('beta0','beta', 'B0', 'B', 'y_pred'))
+t7 = Sys.time() - t6
+t7
+```
+
+This is slower than fitting the model alone, because there are a bunch of additional nodes. 
+
+</br>
+Adding the `y_pred` nodes does not change the WAIC: 
+```{r eval = TRUE}
+
+mcmc.out_restr_pp$WAIC
+mcmc.out_restr$WAIC
+
+```
+When we are monitoring these many variables, it may be necessary to subset 
+the output to make the analysis
+```{r}
+S_pp <- ggs(mcmc.out_restr_pp$samples)
+ggs_density(S_pp, family = "beta")
+```
+
+In this case we are only interested in the predictive distribution, represented by the `y_pred`, we thus define 
+a new `ggs` object containing only those:
+```{r ppcheck}
+ypred_restr <- ggs(mcmc.out_restr_pp$samples, family = "y_pred")
+```
+
+```{r obs-vs-fit}
+names(ypred_restr)
+```
+
+Under this approach we have a sample from the predictive distribution of the response variable,
+we can also summarize it and consider only the median as estimate of the predicted value:
+
+```{r obs-vs-fit2}
+y_pred = mcmc.out_restr_pp$summary$all.chains[startsWith(x = rownames(mcmc.out_restr_pp$summary$all.chains), "y_pred"),2]
+```
+
+Let us now consider some representations of the posterior predictive checks.
+First thing let us compare the distribution of the means of the predicted values (which corresponds to the node `pred_mean` in our model) with the mean of the observed values:
+```{r bayes_pvalue1}
+ggs_ppmean(ypred_restr , outcome=y)
+```
+
+Notice that since we are monitoring the node `pred_mean`, we can also make probabilistic statements about its distribution. For example, we can compute the probability of generating a sample with mean larger than the mean of the observed data:
+```{r bayes_pvalue2}
+mean(mcmc.out_restr_pp$samples$chain1[, "pred_mean"]> mean(y))
+```
+
+<!-- The separation plot for example, which conveys information useful to assess goodness of fit of a model with binary outcomes (and also with ordered categories). The horizontal axis orders the values by increasing predicted probability. The observed successes (ones) have a darker color than observed failures (or zeros). Therefore, a perfect model would have the lighter colors in the right hand side, separated from darker colors. The black horizontal line represents the predicted probabilities of success for each of the observations, which allows to easily evaluate whether there is a strong or a weak separation between successes and failures predicted by the model. Lastly, a triangle on the lower side marks the expected number of total successes (events) predicted by the model. -->
+
+Finally we can also check the distribution of the correctly predicted values:
+
+```{r}
+ggs_pcp(ypred_restr, outcome=y)
+```
+
+
+
+
+**Bonus:** if you do not set the option `sampleAsCodaMCMC=TRUE` when running the 
+`nimbleMCMC` function, the samples will not be stored as an object of class 
+`mcmc.list` but as a standard `data.frame`. 
+You can still produce the same plots as before (although with a little more effort):
+```{r}
+# Trace plot
+plot(mcmc.out$samples$chain1[,1], type="l", ylab=expression(alpha), xlab="Iterations")
+lines(mcmc.out$samples$chain2[,1],type="l", col="red")
+
+
+#Density plot
+plot(density(c(mcmc.out$samples$chain1[,2],mcmc.out$chain2[,2])),xlab=expression(alpha),main="Density plot")
+
+#autocorr.plot(mcmc.out$samples[[1]])
+```
+
+
+## Additional Recommendation & Spoilers
+
+In most basic settings, increasing the number of 
+iterations and/or burn-in and introducing thinning is enough to solve 
+convergence issues. When this is not enough, however, you may want to try one of the following:
+
+* *scale your variables:* when the parameters of the model have very different scales convergence may be slower. 
+This is common in regression problems, when, if the covariates have very different scales, the regression 
+coefficients will have different scales as well. 
+
+
+* *change the parametrization of your model:* sometimes the fact that two (or more) parameters
+are highly correlated can slow down convergence. You can assess this by using cross correlation
+
+```{r, fig.height=10}
+S_full <- ggs(mcmc.out$samples)
+ggs_crosscorrelation(S_full)
+```
+
+If you notice that two parameters are especially correlated, you may improve convergence
+by reparametrizing you model. 
+
+

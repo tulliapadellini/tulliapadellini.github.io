@@ -5,6 +5,7 @@
     <link>https://tulliapadellini.github.io/</link>
     <description>Recent content in Home on Tullia Padellini</description>
     <generator>Hugo -- gohugo.io</generator>
+    <copyright>2023</copyright>
     <lastBuildDate>Tue, 15 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://tulliapadellini.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>About</title>
@@ -12,7 +13,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://tulliapadellini.github.io/about/</guid>
-      <description>I am currently an Expert (Statistics) in the Statistical Analysis Directorate of the Bank of Italy.
+      <description>I am part of the Business Survey Unit of the Bank of Italy, where I have been working since November 2021.
 In my past life, I was a Post Doctoral Research Associate in the Environment and Health Statistics Group of Imperial College London, where I was working with Marta Blangiardo.
 While at Imperial, I have also been part of the Statistical Modelling Laboratory set up by the Royal Statistical Society and the Alan Turing Institute to support the UK Health Security Agency (UKHSA) COVID-19 response.</description>
     </item>
@@ -51,6 +52,17 @@ Ethnically diverse and socio-economically deprived communities have been differe
     </item>
     
     <item>
+      <title>Research</title>
+      <link>https://tulliapadellini.github.io/research/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://tulliapadellini.github.io/research/</guid>
+      <description>An updated list of publications and working papers can be found on my scholar page.
+As a result of a crippling fear of commitment, I worked on many unrelated things. My two main focus however have been non parametric statistics (topological data analysis in particular) and bayesian spatio-temporal modeling (with and without applications to public health).
+Bayesian spatio-temporal models for COVID-19 During my post-doc at Imperial, I worked on the development of spatio-temporal models for different metrics of COVID-19 burden (test positivity, prevalence and mortality).</description>
+    </item>
+    
+    <item>
       <title>Talks</title>
       <link>https://tulliapadellini.github.io/talks/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -84,7 +96,8 @@ Topological Invariants for high-dimensional Time Series
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://tulliapadellini.github.io/teaching/</guid>
-      <description>Coming soon</description>
+      <description>some dated lectures and tutoring material  Introduction to NIMBLE (July 2021)  pt I - Writing and running a NIMBLE model pt II - Making sense of a NIMBLE model pt III - More advanced stuff     Introduction to INLA (Dec 2019)    Statistics crash course (Sept 2016)
+ Descriptive Statistics Probability Statistical Inference    </description>
     </item>
     
     <item>
@@ -130,6 +143,86 @@ Topological Invariants for high-dimensional Time Series
       
       <guid>https://tulliapadellini.github.io/docs/comments-support/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>The almighty Bootstrap</title>
+      <link>https://tulliapadellini.github.io/lezioni/2018-04-29-bootstrap/</link>
+      <pubDate>Wed, 02 Nov 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://tulliapadellini.github.io/lezioni/2018-04-29-bootstrap/</guid>
+      <description>Ingredienti di base Riprendiamo il classico setup visto ad inferenza, ossia supponiamo di avere un campione \(X_1,\dots X_n\) di variabili indipendenti ed identicamente distribuite (i.i.d.) proveniente da una distribuzione \(F\), dove \(F(x) = \mathbb{P}(X_i\leq x)\).
+Indichiamo con \(\mu_F\) e \(\sigma^2 _F\) rispettivamente la media e la varianza della generica variabile \(X_i\). La notazione con \(F\) sottoscritto serve a ricordare che sia \(\mu_F\) che \(\sigma^2_F\) sono funzioni della funzione di ripartizione, infatti:</description>
+    </item>
+    
+    <item>
+      <title>The almighty Bootstrap</title>
+      <link>https://tulliapadellini.github.io/the-almighty-bootstrap/</link>
+      <pubDate>Wed, 02 Nov 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://tulliapadellini.github.io/the-almighty-bootstrap/</guid>
+      <description>Ingredienti di base Riprendiamo il classico setup visto ad inferenza, ossia supponiamo di avere un campione \(X_1,\dots X_n\) di variabili indipendenti ed identicamente distribuite (i.i.d.) proveniente da una distribuzione \(F\), dove \(F(x) = \mathbb{P}(X_i\leq x)\).
+Indichiamo con \(\mu_F\) e \(\sigma^2 _F\) rispettivamente la media e la varianza della generica variabile \(X_i\). La notazione con \(F\) sottoscritto serve a ricordare che sia \(\mu_F\) che \(\sigma^2_F\) sono funzioni della funzione di ripartizione, infatti:</description>
+    </item>
+    
+    <item>
+      <title>R - 101</title>
+      <link>https://tulliapadellini.github.io/lezioni/lab01/</link>
+      <pubDate>Thu, 13 Oct 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://tulliapadellini.github.io/lezioni/lab01/</guid>
+      <description>Introduzione a R Queste note costituiscono un’introduzione ad R, un linguaggio di programmazione rivolto all’analisi dei dati, utilizzato in statistica e data mining. Perchè proprio R?
+ È gratuito: contrariamente ad altri software comunemente utilizzati in ambito economico-statistico (ad esempio SAS, STATA etc), R ? open-source. È aggiornato: quando viene presentata una nuova metodologia di analisi dei dati, molto spesso la prima implementazione ? proprio in R. È redditizio…  Informazioni introduttive possono essere trovate su wikipedia e r-project.</description>
+    </item>
+    
+    <item>
+      <title>R - 101</title>
+      <link>https://tulliapadellini.github.io/r-101/</link>
+      <pubDate>Thu, 13 Oct 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://tulliapadellini.github.io/r-101/</guid>
+      <description>Introduzione a R Queste note costituiscono un’introduzione ad R, un linguaggio di programmazione rivolto all’analisi dei dati, utilizzato in statistica e data mining. Perchè proprio R?
+ È gratuito: contrariamente ad altri software comunemente utilizzati in ambito economico-statistico (ad esempio SAS, STATA etc), R ? open-source. È aggiornato: quando viene presentata una nuova metodologia di analisi dei dati, molto spesso la prima implementazione ? proprio in R. È redditizio…  Informazioni introduttive possono essere trovate su wikipedia e r-project.</description>
+    </item>
+    
+    <item>
+      <title>Basic Monte Carlo</title>
+      <link>https://tulliapadellini.github.io/lectures/montecarlo/</link>
+      <pubDate>Wed, 12 Oct 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://tulliapadellini.github.io/lectures/montecarlo/</guid>
+      <description>The intuition: Remember the (weak) Law of Large Numbers? Just a quick recap: if \(X_1,\dots, X_n\) are i.i.d. random variables from a distribution \(F\) with mean \(\mu\) and variance \(\sigma^2\), then the sample mean \(\bar{X}_n\) converges in probability to the population mean \(\mu\).
+Using more formulas, we can write the LLN as \[ \bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i \rightarrow \mu =\int xdF(x)\] as \(n\rightarrow \infty\). One way to look at this is that, if the sample size \(n\) is “close to infinity” (or more generally, if \(n\) is “large enough”), then we have \[\frac{1}{n}\sum_{i=1}^n X_i \approx \int xdF.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://tulliapadellini.github.io/teaching/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://tulliapadellini.github.io/teaching/</guid>
+      <description>where &amp;amp; when to find me:  address: stanza 39 &amp;ndash; Dipartimento di Scienze Statistiche, Piazzale Aldo Moro 5, 00185, Rome, ITALY office hours:  @Sapienza: tuesday 9 &amp;ndash; 11 @LUISS: by appointment     Teaching Last year I was teaching the Preparatory R Course for the Bachelor&amp;rsquo;s degree in Bioinformatics at Sapienza Università di Roma. Course material can be found here.
+ I was also in charge of the Preparatory Course in Statistics for the Ms courses in Economics and Finance and Banking at Università di Roma - Torvergata.</description>
+    </item>
+    
+    <item>
+      <title>INLA</title>
+      <link>https://tulliapadellini.github.io/lectures/model/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://tulliapadellini.github.io/lectures/model/</guid>
+      <description>{INLA\ {as much as you can learn in 90 minutes}} INLA Efficient (i.e. fast) and accurate computational tool for Bayesian Statistics.
+ INLA - the method  a deterministic algorithm to approximate the posterior distribution    R-INLA - the implementation  an R package to perform fit a large class of models in a Bayesian way    INLA -Integrated Nested Laplace Aproximation  it’s fast  relies on numerical approximation and sparse matrices    it’s accurate  empirically shows better performances than MCMC    it’s flexible  can be used to fit any model formulated as a GAN    it is (relatively) easy to use  it’s implemented as an R package    Motivation Do we actually need yet another way to implement Bayesian Methods?</description>
+    </item>
+    
+    <item>
+      <title>INLA</title>
+      <link>https://tulliapadellini.github.io/lectures/untitled/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://tulliapadellini.github.io/lectures/untitled/</guid>
+      <description>INLA Efficient (i.e. fast) and accurate computational tool for Bayesian Statistics.
+ INLA - the method  a deterministic algorithm to approximate the posterior distribution    R-INLA - the implementation  an R package to perform fit a large class of models in a Bayesian way    INLA -Integrated Nested Laplace Aproximation  it’s fast  relies on numerical approximation and sparse matrices    it’s accurate  empirically shows better performances than MCMC    it’s flexible  can be used to fit any model formulated as a GAN    it is (relatively) easy to use  it’s implemented as an R package    Motivation Do we actually need yet another way to implement Bayesian Methods?</description>
     </item>
     
     <item>

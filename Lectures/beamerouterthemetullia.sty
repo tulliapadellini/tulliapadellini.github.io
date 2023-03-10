@@ -1,0 +1,25 @@
+\mode<presentation>
+
+% Frame title
+\defbeamertemplate*{frametitle}{tullia}[1][]
+{
+
+
+\vskip1cm%
+ \begin{beamercolorbox}[wd=\paperwidth,ht=1.2cm]{frametitle} 
+ \begin{tikzpicture}
+ \useasboundingbox[fill=white](0,0) rectangle(\the\paperwidth,-0.4);
+ \fill[light!45] (0,0) rectangle(\the\paperwidth,1.4);
+ \ifx\insertframesubtitle\@empty%
+  {\node[anchor=west, white,font=\huge] at (1,0.81){\textbf{\insertframetitle}};}
+   \else%
+  {\node[anchor= west, white,font=\huge] at (1,0.81){\textbf{\insertframetitle}};%
+    \node[anchor= west, dark,font=\small] at (1,0.31){\text{\insertframesubtitle}};}%
+  \fi
+  \end{tikzpicture}
+  \end{beamercolorbox}
+}
+
+\mode<all>
+
+

@@ -1,0 +1,490 @@
+---
+title: "Writing and running your first nimble model"
+subtitle: "Spatial and spatio-temporal models with NIMBLE"
+author: "Tullia Padellini"
+date: "1 July 2021"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, cache = TRUE, fig.align = 'center', fig.width = 10)
+```
+
+# Writing and running a model in NIMBLE
+
+**N**umerical **I**nference for statistical **M**odels for **B**ayesian and **L**ikelihood **E**stimation (`NIMBLE`)
+
+When the analysis is not conjugate, carrying on Bayesian inference is non-trivial:
+since writing your own MCMC can be *complex*, and *time consuming*.
+More critically, simulation methods such as MCMC are *computationally very intensive*,
+which means that you may need to use programming languages which are faster than `R`,
+such as `C++`.
+
+`nimble` is an `R` package that allows to tackle these issues, making it easier 
+to fit Bayesian models. The idea behind `nimble` is that the user only needs to 
+specify the model, and then `nimble` will automatically write efficient C++ code 
+to implement several simulation algorithms. 
+
+As its creators put it:
+
+*One of the most important concepts behind NIMBLE is to allow a combination of high-level processing in R and low-level processing in C++. For example, when we write a Metropolis-Hastings MCMC sampler in the NIMBLE language, the inspection of the model structure related to one node is done in R, and the actual sampler calculations are done in C++.*
+
+
+##### *Step 1. write the model*
+
+In the first step you need to specify the variables involved in your model and 
+how they are related to each other.
+
+Let us consider a basic example where we observe a sample $X_1, \dots, X_n$ of
+normally distributed random variables. Mean and variance are common to all 
+observations but unknown, hence our goal is to estimate them. 
+
+In a Bayesian fashion, we specify priors for the two unknown parameters of interest, 
+thus obtaining the following model:
+
+\begin{align*}
+X_i| \mu, \sigma & \sim \text{Normal}(\mu, \sigma) \\
+\mu & \sim \text{Normal}(0, 10) \\
+\sigma^2 & \sim \text{Uniform}(0,1000)
+\end{align*}
+
+Notice that in this case, as we are not working with conjugate priors, it may be 
+difficult (if possible at all) to derive the posterior distribution of the parameters
+of interest (and the corresponding means), which is why we turn to simulation methods.
+
+
+In the case of `nimble`, in particular, we need to input only the model as seen 
+above, and then the software will automatically produce random draws for the 
+posterior distribution.
+
+More specifically, our basic model can be specified as:
+```{r eval = FALSE}
+code <- nimbleCode({
+
+    # priors: 
+    mu ~ dnorm(0, sd = 10)
+    sigma2 ~ dunif(0, 1000)
+    tau <- 1 / sigma2
+    
+    # likelihood: 
+    for(i in 1:N){
+        x[i] ~ dnorm(mu, var = sigma2)
+    }
+})
+```
+
+While the model code may seem similar to `R` code, it is a completely different 
+language (more on that later).
+
+</br>
+
+
+##### *Step 2. compile & run the model*
+
+In the second step you need to specify the basic configuration of your MCMC algorithm 
+(i.e. the number of chains you want to run, the number of iterations to be run for each chain and so on)
+and what are the data. 
+
+<!-- `nimble` will convert your model specification in `C++`, and then convert the resulting object back to `R` -->
+
+In the case of our toy example: 
+
+```{r, eval = FALSE}
+data <- list(x = c(2, 5, 3, 4, 1, 0, 1, 3, 5, 3))
+
+mcmc.out <- nimbleMCMC(code = code, 
+                       data = data,
+                       nchains = 2, niter = 1000)
+```
+
+</br>
+
+## Step 1: Write the model
+
+Writing the model basically consists of specifying:
+
+* **which** are the variables of the problem 
+* **how** they are related to each other. 
+
+</br>
+
+
+In our basic example the *variables* are:
+
+* $X_1, \dots, X_N$: the observations. Each of the $X_i$ is related to $\mu$ and $\sigma$ 
+\[X_i| \mu, \sigma  \sim \text{Normal}(\mu, \sigma)\]
+
+* $\mu$: the mean of the ... this is also a random variable 
+\[\mu  \sim \text{Normal}(0, 10)\]
+
+* $\sigma^2$
+\[\sigma^2 \sim \text{Uniform}(0,1000)\]
+
+* $\tau = 1/\sigma^2$ as a transformation of a random variable, this is still a random variable, 
+however, you don't need to specify a distribution for it, it automatically comes from the distribution of $\sigma^2$
+
+</br> 
+
+In general, variables in `nimble` can be of two types: *stochastic* or *deterministic*. 
+
+
+### **stochastic** variables
+
+Variables on which you make distributional assumptions are called *stochastic*. 
+These variables are declared through the symbol `~`, which links the 
+name of the variable (e.g. `mu`) to the distribution of your choice (e.g. `dnorm`).
+
+**Example:** 
+
+```{r eval = FALSE}
+mu ~ dnorm(0, sd = 1000)
+sigma ~ dunif(0, 1000)
+
+for(i in 1:N){
+    x[i] ~ dnorm(mu, sd = sigma)
+}
+```
+
+All most common distribution are already implemented in `nimble`, let us list a 
+couple of examples:
+
+* Normal `x ~ dnorm(mu, tau)`
+* Poisson `x ~ dpois(lambda)`
+* Binomial `x ~ dbinom(n, p)`
+* Uniform `x ~ dunif(low, up) `
+* Multinomial `x ~ dmulti(p, n)`
+* Multivariate normal `x ~ dmnorm(mu, var)`
+
+`nimble` allows to have different parametrization of the same distribution. 
+For example in the case of the `normal` distribution, one can choose between:
+
+* `dnorm(mu = 0, sd = 1)` 
+* `dnorm(mu = 0, var = 1)`
+* `dnorm(mu = 0, tau = 1)`  *default*
+
+If you don't specify the name of the variance parameter, i.e. `dnorm(0,1)`, 
+`nimble` will by default consider the second parameter to be the *precision*. 
+It's good practice to always explicitly specify the name of the parameter you 
+are trying to fix/model. 
+
+Check [here](https://r-nimble.org/html_manual/cha-writing-models.html#tab:distributions)
+for a complete list of the distribution in `nimble` and their parametrization. 
+You can also define your own probability distribution. 
+
+
+Multidmensional variables, such as the vector of observations $X = X_1,\dots, X_n$ 
+can be represented in `nimble` as multidimensional objects such as vectors or matrices.
+The syntax to select one or more elements from a vector or a matrix 
+in `nimble` code is the same as basic `R`. 
+
+For example if `x` is a vector, `x[i]` will return its $i$-th entry;
+if `x` is a matrix `x[i,j]` will return the element on row $i$ and column $j$. 
+
+In the case of a multidimensional variable, such as the vector of observations 
+of our toy example, `x`, we have to specify the distribution of 
+all its components. 
+
+This can be done in several ways:
+
+* using a for loop:
+
+```{r eval = FALSE}
+for(i in 1:N){
+    x[i] ~ dnorm(mu, sd = sigma)
+}
+```
+
+* joint specification with explicit dimension references:
+
+```{r eval = FALSE}
+code <- nimbleCode({
+  y[1:K] ~ dmulti(p[1:K], n)
+  p[1:K] ~ ddirch(alpha[1:K])
+  log(alpha[1:K]) ~ dmnorm(alpha0[1:K], R[1:K, 1:K])
+})
+```
+
+* joint specification without explicit dimension references:
+
+```{r eval = FALSE}
+codeAlt <- nimbleCode({
+  y[] ~ dmulti(p[], n)
+  p[] ~ ddirch(alpha[])
+  log(alpha[]) ~ dmnorm(alpha0[], R[ , ])
+})
+```
+
+Notice that the following syntax is **invalid**.
+```{r, eval = FALSE}
+y ~ dmulti(p, n)
+```
+As opposed to `R`, where you can assign a vector or a scalar with the same syntax,
+in `nimble` you always have to refer to the vector structure, whether implicitely
+(i.e. using the empty `[]`) or explicitly (i.e. specifying the dimension `[1:K]`)
+
+
+### **deterministic** variables 
+
+are declared through the symbol `<-`
+e.g. we are not interested in the variance $\sigma^2$ but in the precision $\tau = 1/\sigma^2$. 
+This is very similar to what you would do in basic `R`.
+```{r eval = FALSE}
+tau <- 1/ sigma2
+```
+
+  
+As in the case of stochastic nodes, square brackets must always be provided to indicate number of dimensions in the case of vector variables:
+```{r eval = FALSE}
+for(i in 1:10) {
+    logY[i] <- log(Y[i])
+}
+```
+
+```{r eval = FALSE}
+logY[1:10] <- log(Y[1:10])
+```
+
+
+    
+You can also use matrix algebra operations, such as inner product `%*%`: 
+
+```{r eval = FALSE}
+
+```
+
+`nimble` treats vector/matrices differently than scalar.
+If `x` is 2-dimensional, use `x[,] %*% beta[]`, not `x %*% beta`
+
+In addition to use `[]` to make clear that you are working with an higher dimensional
+object, you need to be careful about scalar vs. vector vs. matrix vs. array. 
+
+This will not work:
+```{r eval = FALSE}
+x[1:5] <- A[1:5, 1:5] %*% b[1:5] + c[1:5]
+```
+
+The problem is that the right-hand-side returns a matrix, so we can't assign it to a vector.
+This will work:
+```{r eval = FALSE}
+x[1:5] <- (A[1:5, 1:5] %*% b[1:5] + c[1:5])[,1]
+```
+
+
+**NB:** not all the functions in `R` are available in `nimble`. Check [here](https://r-nimble.org/html_manual/cha-writing-models.html#tab:functions) for a complete list of functions. 
+
+### Additional code
+
+#### if statements
+
+If you wish to define multiple alternative models in one set of code,
+you can use if-then-else statements. These will be evaluated based on
+variables in the R environment when the model is defined.  For
+example:
+
+```{r eval = FALSE}
+code <- nimbleCode({
+    sigma ~ dunif(0, 10)
+    beta0 ~ dnorm(0, sd = 1000)
+    beta1 ~ dnorm(0, sd = 1000)
+    if(INCLUDE_X2) { beta2 ~ dnorm(0, sd = 1000) } else {}
+    for(i in 1:10) {
+        if(INCLUDE_X2) {
+            y[i] ~ dnorm(beta0 + beta1 * x1[i] + beta2 * x2[i], sd = sigma)
+        } else {
+            y[i] ~ dnorm(beta0 + beta1 * x1[i], sd = sigma)
+        }
+    }
+})
+
+INCLUDE_X2 <- FALSE
+m1 <- nimbleModel(code)
+INCLUDE_X2 <- TRUE
+m2 <- nimbleModel(code)
+```
+Depending on the value of the variable `INCLUDE_X2` different models are chosen.
+
+#### ordering
+
+We have seen before that our basic model:
+\begin{align*}
+X_i| \mu, \sigma & \sim \text{Normal}(\mu, \sigma) \\
+\mu & \sim \text{Normal}(0, 10) \\
+\sigma & \sim \text{Uniform}(0,1000)
+\end{align*}
+
+Could be translated in `nimble` as follows:
+```{r eval = FALSE}
+code <- nimbleCode({
+
+    # priors: 
+    mu ~ dnorm(0, sd = 1000)
+    tau ~ dunif(0, 1000)
+    
+    sigma2 <- 1 / tau
+    
+    # likelihood: 
+    for(i in 1:10){
+        x[i] ~ dnorm(mu, var = sigma2)
+    }
+
+})
+```
+
+
+
+`nimble` is a declarative language, which means that it defines objects but 
+is not run "line by line" as it would be the case for basic R. 
+Each line declares that a component should be run
+but it doesn’t matter in what order they are declared.
+
+The following code is thus completely analogous to the previous one:
+```{r eval = FALSE}
+code <- nimbleCode({
+
+    # likelihood:
+    for(i in 1:10){
+        x[i] ~ dnorm(mu, var = sigma2)
+    }
+    
+    # priors
+    mu ~ dnorm(0, sd = 1000)
+    tau ~ dunif(0, 1000)
+    
+    sigma2 <- 1 / tau
+})
+```
+
+
+## Step 2: running the model
+
+Once you have written the model, the most direct approach to executing an MCMC 
+algorithm in NIMBLE is using the function `nimbleMCMC`. This single command can be used to 
+create an underlying model and associated MCMC algorithm, compile both of these, 
+execute the MCMC, and return samples, summary statistics, and a WAIC value. 
+
+
+```{r, eval = FALSE}
+mcmc.out <- nimbleMCMC(code = code, 
+                       constants = list(N=10),
+                       data = data, 
+                       inits = inits,
+                       nchains = 2, 
+                       niter = 1000,
+                       summary = TRUE,
+                       samples = TRUE,
+                       monitors = c('mu','sigma2', 'tau'),
+                       samplesAsCodaMCMC = TRUE)
+
+```
+Let us analyze some of the arguments of `nimbleMCMC`: 
+
+* `code`: a `nimble-code` object, created with the function `nimbleCode`. It contains 
+the model specification but no information on the data, hence it can be recycled for 
+multiple samples from the same phenomenon. 
+
+* `data`: a list containing the observations to be used in the fitting. The list 
+element must have the same name as the corresponding variable in the model specified in `code`, 
+so that `nimble` can link them. 
+```{r, eval = FALSE}
+nimbleData <- list(x = c(2, 5, 3, 4, 1, 0, 1, 3, 5, 3))
+```
+The separation between the data and the model allows an algorithm to be applied to many datasets in the same model without re-creating the model each time. It also allows simulation of data in a model.
+
+* `constants`: a list containing *structural* variables that do not change in different datasets of the same model, such as for example a vector of known index values, such as for block indices, or variables used in the index ranges of for-loops. Once again, each element of this list must have the same name as the variable in the `code` object it referres to. 
+
+```{r, eval = FALSE}
+nimbleConsts = list(N = 10)
+```
+
+
+* `inits` initial values of the Markov Chains. They can be provided either as a list:
+```{r, eval = FALSE}
+nimbleInits <- list(mu = 1, sigma = 1)
+```
+
+either as a function, returning a list:
+```{r eval = FALSE}
+nimbleInits <- function() list(mu = rnorm(1,0,1), sigma = runif(1,0,10))
+```
+
+* `nchains`: number of chains to be run (typically 2 or 4, you can have only 1 as well but multiple chains are required for some of the diagnostics). 
+* `thin`: thinning factor
+* `niter`: number of MCMC iterations for each chain
+* `nburnin`: number of iteration to be discarded as part of the burning in
+* `summary`: logical value. If `TRUE`, `nimbleMCMC` will return a summary of the chains it ran
+* `samples`: logical value. If `TRUE`, `nimbleMCMC` will return the values generated for each chain, after the burn-in 
+* `samplesAsCodaMCMC`: logical value. If `TRUE`, `nimbleMCMC` will return an object of class `coda`. This allows to use the output of the function `nimbleMCMC` in other `R` packages, which is especially relevant for assessing convergence (as we will see later)
+* `WAIC`: logical value. If `TRUE`, `nimbleMCMC` will compute and return the WAIC value of the model
+* `monitors`: a vector containing the names of the variables/parameters we want `nimble` to produce output for. 
+For example if we set
+```{r eval =FALSE}
+monitors = c('mu','sigma2', 'tau')
+```
+we will have posterior samples/summaries for $\mu, \sigma^2$ and $\tau$. 
+If we set 
+```{r eval =FALSE}
+monitors = c('mu', 'tau')
+```
+we will only have samples/summaries for $\mu$ and $\tau$. 
+
+
+</br>
+Let us run our toy model:
+```{r, eval = TRUE}
+library(nimble)
+code <- nimbleCode({
+
+    # likelihood:
+    for(i in 1:10)
+        x[i] ~ dnorm(mu, var = sigma2)
+    
+    
+    # priors
+    mu ~ dnorm(0, sd = 100)
+    sigma2 ~ dunif(0, 1000)
+    
+    tau <- 1 / sigma2
+})
+
+data <- list(x = c(2, 5, 3, 4, 1, 0, 1, 3, 5, 3))
+
+initsFunction <- function() list(mu = rnorm(1,0,1), sigma2 = runif(1,0,10))
+
+mcmc.out <- nimbleMCMC(code = code, 
+                       constants = list(N=10),
+                       data = data, 
+                       inits = initsFunction,
+                       nchains = 2, 
+                       niter = 1000,
+                       summary = TRUE,
+                       samples = TRUE,
+                       monitors = c('mu','sigma2', 'tau'),
+                       samplesAsCodaMCMC = TRUE)
+
+```
+
+The object `mcmc.out` is a list containing both the chains we ran and a summary of them:
+```{r eval = TRUE}
+class(mcmc.out)
+names(mcmc.out)
+```
+Let's have a quick look. The object `$samples` is another list, containing the random 
+draws for each iteration of the MCMC sampler:
+```{r eval = TRUE}
+head(mcmc.out$samples)
+```
+
+
+The `$summary` is also a list, whose entries are a summary of the posterior 
+distribution of the parameters monitored:
+```{r}
+mcmc.out$summary
+```
+
+As you can see the point estimate $\hat{\tau}$ is different than $1/\hat{\sigma}$, 
+which is why if you are interested in some transformation of the parameter is convenient 
+to define such tranformation in your model specification and then monitor it.
+

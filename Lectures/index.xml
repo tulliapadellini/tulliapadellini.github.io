@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Lectures on Tullia Padellini</title>
+    <link>https://tulliapadellini.github.io/lectures/</link>
+    <description>Recent content in Lectures on Tullia Padellini</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>2023</copyright>
+    <lastBuildDate>Wed, 12 Oct 2016 00:00:00 +0000</lastBuildDate><atom:link href="https://tulliapadellini.github.io/lectures/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Basic Monte Carlo</title>
+      <link>https://tulliapadellini.github.io/lectures/montecarlo/</link>
+      <pubDate>Wed, 12 Oct 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://tulliapadellini.github.io/lectures/montecarlo/</guid>
+      <description>The intuition: Remember the (weak) Law of Large Numbers? Just a quick recap: if \(X_1,\dots, X_n\) are i.i.d. random variables from a distribution \(F\) with mean \(\mu\) and variance \(\sigma^2\), then the sample mean \(\bar{X}_n\) converges in probability to the population mean \(\mu\).
+Using more formulas, we can write the LLN as \[ \bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i \rightarrow \mu =\int xdF(x)\] as \(n\rightarrow \infty\). One way to look at this is that, if the sample size \(n\) is “close to infinity” (or more generally, if \(n\) is “large enough”), then we have \[\frac{1}{n}\sum_{i=1}^n X_i \approx \int xdF.</description>
+    </item>
+    
+    <item>
+      <title>INLA</title>
+      <link>https://tulliapadellini.github.io/lectures/model/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://tulliapadellini.github.io/lectures/model/</guid>
+      <description>{INLA\ {as much as you can learn in 90 minutes}} INLA Efficient (i.e. fast) and accurate computational tool for Bayesian Statistics.
+ INLA - the method  a deterministic algorithm to approximate the posterior distribution    R-INLA - the implementation  an R package to perform fit a large class of models in a Bayesian way    INLA -Integrated Nested Laplace Aproximation  it’s fast  relies on numerical approximation and sparse matrices    it’s accurate  empirically shows better performances than MCMC    it’s flexible  can be used to fit any model formulated as a GAN    it is (relatively) easy to use  it’s implemented as an R package    Motivation Do we actually need yet another way to implement Bayesian Methods?</description>
+    </item>
+    
+    <item>
+      <title>INLA</title>
+      <link>https://tulliapadellini.github.io/lectures/untitled/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://tulliapadellini.github.io/lectures/untitled/</guid>
+      <description>INLA Efficient (i.e. fast) and accurate computational tool for Bayesian Statistics.
+ INLA - the method  a deterministic algorithm to approximate the posterior distribution    R-INLA - the implementation  an R package to perform fit a large class of models in a Bayesian way    INLA -Integrated Nested Laplace Aproximation  it’s fast  relies on numerical approximation and sparse matrices    it’s accurate  empirically shows better performances than MCMC    it’s flexible  can be used to fit any model formulated as a GAN    it is (relatively) easy to use  it’s implemented as an R package    Motivation Do we actually need yet another way to implement Bayesian Methods?</description>
+    </item>
+    
+  </channel>
+</rss>
